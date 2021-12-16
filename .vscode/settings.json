@@ -1,0 +1,7 @@
+{
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "code-runner.executorMap": {
+        "python": "/workdir/log/WP_py.sh $fileName",
+    }
+}
