@@ -2,6 +2,6 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "code-runner.executorMap": {
-        "python": "/workdir/log/WP_py.sh $dirWithoutSlush$fileName",
+        "python":"cd $dir && /workdir/log/WP_py.sh $fileName",
     }
 }
