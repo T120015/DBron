@@ -21,9 +21,9 @@ print(f"時給100％ {np.max(h_wage)}")
 # 度数分布
 hst, border = np.histogram(
     h_wage, bins=10, range=(np.min(h_wage), np.max(h_wage)))
-hst = np.append(hst,0)
+hst = np.append(hst, 0)
 # 棒グラフ表示
-plt.bar(border, hst, tick_label=border)
+plt.bar(border, hst, tick_label=border, width=20)
 # x軸目盛ラベルのフォントサイズを変更する
 plt.xticks(fontsize=6)
 plt.title("最低時給ヒストグラム")
