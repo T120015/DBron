@@ -21,4 +21,16 @@ def index():
     return rndtmp('top.html', title="10までの素数", msg=num)
 
 
+@app.route("/sosuu/<n>")
+def Number(n):
+    num = []
+    for i in range(int(num)):
+        if ip(i):
+            print(i)
+            num.append(i)
+    msg = """
+    素数は{}です．
+    """.format(num)
+    return rndtmp('top.html', title="{}までの素数".format(n), msg=msg)
+
 app.run(host="127.0.0.1", port=5000, debug=True)
