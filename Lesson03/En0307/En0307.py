@@ -1,5 +1,5 @@
 from flask import Flask as flk,render_template as rndtmp
-from sympy import isprim as ip
+from sympy import isprime as ip
 import numpy as np
 
 app = flk(__name__)
