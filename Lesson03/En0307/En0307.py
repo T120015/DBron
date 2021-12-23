@@ -10,6 +10,6 @@ def top():
 @app.route("/sosuu/")
 def index():
   print([i for i in sv.primerange(10)])
-  return rndtmp("index.html",title="10までの素数")
+  #return rndtmp("index.html",title="10までの素数")
 
 app.run(host="127.0.0.1",port=5000)
