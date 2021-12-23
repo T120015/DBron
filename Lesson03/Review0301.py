@@ -47,5 +47,5 @@ x = np.array([np.min(siken["Eng"]),np.max("Eng")])
 a,b = np.polyfit(siken["Eng"],siken["Jpn"])
 # 散布図
 plt.title("相関図")
-plt.figure()
+#plt.figure()
 # EngとJpnの相関係数は1行2列，MathとJpnの相関係数は1行2列
