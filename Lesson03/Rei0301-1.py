@@ -6,7 +6,7 @@ import japanize_matplotlib
 
 #kimatsu.csvを読み込む，0行目を列の名称（header），0列目を行の名称(index_col)とする
 #【入力】
-
+siken = pd.read_csv("./data/kimatu.csv",index_col=0, header=0)
 #print(f"試験結果\n{siken}")  #for debug
 
 #合計点を算出
@@ -18,6 +18,7 @@ siken["Hensa"] = ( siken["Total"] - mean )/std * 10 + 50
 
 #クラスごとにデータを抽出
 #【入力】
+siken_a = siken.query("Croom == 'A' ")
 siken_b = siken.query("Croom == 'B' ")
 siken_c = siken.query("Croom == 'C' ")
 #クラスごとに基本統計量を算出
