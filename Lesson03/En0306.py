@@ -8,6 +8,7 @@ def main():
   data = """
   SELECT answer1, COUNT(answer1) AS cnt
   FROM quest
+  GROUP BY answer1
   """
 
   pos_num = slc(data)
