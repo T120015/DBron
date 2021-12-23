@@ -13,6 +13,6 @@ sqlstring = f"""
     ;
 """
 postNum = mdb.my_select(sqlstring)
-#.iterrows:配列を1行を繰り返す
+#index, row = df.iterrows()１行ずつ繰り返す
 for index, row in postNum.iterrows():
   print("{} {} {}".format(row["postnumber"],row["officename"],row["area"]))
