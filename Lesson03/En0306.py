@@ -4,21 +4,25 @@ import japanize_matplotlib
 from mydblib import my_select as slc
 
 
-
 def main():
-  data = """
+    data = """
   SELECT answer1, COUNT(answer1) AS cnt
   FROM quest
   GROUP BY answer1
   """
 
-  post_num = slc(data)
+    post_num = slc(data)
 
-  print(post_num)
+    print(post_num)
 
-  #make graph
-  plt.bar(post_num["answer1"], post_num["cnt"], tick_label=post_num["answer1"])
-  plt.title("アンケート結果")
+    # make graph
+    plt.bar(post_num["answer1"], post_num["cnt"],
+            tick_label=post_num["answer1"])
+    plt.title("アンケート結果")
+    plt.xlabel("アンケート番号")
+    plt.ylabel("データ数")
+    plt.savefig("./img/En0306.png")
+
 
 if __name__ == "__main__":
-  main()
+    main()
