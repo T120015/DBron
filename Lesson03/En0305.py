@@ -5,12 +5,12 @@ from mydblib import my_select as slc
 
 frm = "post_office"
 city = "茅野市"
-prefecture = ["長野県", "新潟県", "富山県", "石川県", "福井県"]
+prefecture = ("長野県", "新潟県", "富山県", "石川県", "福井県")
 
 sqlstring = f"""
     SELECT prefecture, COUNT(prefecture) AS pcnt
     FROM {frm}
-    WHERE prefecture IN('{prefecture[0]}','{prefecture[1]}','{prefecture[2]}','{prefecture[3]}','{prefecture[4]}')
+    WHERE prefecture IN {prefecture}
     GROUP BY prefecture
     ;
 """
