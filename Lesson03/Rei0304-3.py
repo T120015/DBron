@@ -10,7 +10,7 @@ city="原村"
 sqlstring =  f"""
     SELECT *
     FROM post_area
-    WHERE city = '%{city}%'
+    WHERE city LIKE '%{city}%'
     ;
 """
 
