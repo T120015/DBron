@@ -18,7 +18,7 @@ sqlstring = f"""
 postNum = slc(sqlstring)
 print(postNum)
 # make graph
-plt.bar(postNum["prefecture"], postNum["pcnt"],
+plt.bar(len(postNum["prefecture"]), postNum["pcnt"],
         ticklabel=postNum["prefecture"])
 plt.title("北信越地方県別事業所数")
 plt.xlabel("県名")
