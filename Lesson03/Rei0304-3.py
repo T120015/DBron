@@ -6,11 +6,12 @@ from mydblib import my_select
 #SQLの設定
 # tableに検索するtable名
 city="原村"
-
+prefecture = "長野県"
 sqlstring =  f"""
     SELECT *
     FROM post_area
     WHERE city LIKE '%{city}%'
+    AND prefecture = '{prefecture}'
     ;
 """
 
