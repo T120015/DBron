@@ -13,4 +13,6 @@ sqlstring = f"""
     ;
 """
 postNum = mdb.my_select(sqlstring)
-print(postNum)
+#.iterrows:配列を1行を繰り返す
+for row in postNum.iterrows():
+  print("{} {} {}".format(row.postnumber,row.officename,row.area))
