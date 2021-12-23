@@ -24,10 +24,10 @@ def top2():
         ;
     """
     qdata = my_select( sqlstring )
-    #print( f"qdata\n{qdata}")  #for debug
+    print( f"qdata\n{qdata}")  #for debug
 
-    #print( f"cols {qdata.columns}")  #for debug 
-    #print( f"data {qdata.values}")  #for debug
+    print( f"cols {qdata.columns}")  #for debug
+    print( f"data {qdata.values}")  #for debug
 
     return render_template("top.html",
         title = page_title,
