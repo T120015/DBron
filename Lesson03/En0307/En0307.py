@@ -1,5 +1,6 @@
 from flask import Flask as flk,render_template as rndtmp
-from sympy import sieve as sv
+from sympy import isprim as ip
+import numpy as np
 
 app = flk(__name__)
 
@@ -9,7 +10,9 @@ def top():
 
 @app.route("/sosuu/")
 def index():
-  print([i for i in sv.primerange(10)])
-  #return rndtmp("index.html",title="10までの素数")
+  for i in range(10):
+    if ip(i):
+      num = np.append(num, i)
+  return rndtmp("index.html",title="10までの素数", num = num)
 
 app.run(host="127.0.0.1",port=5000)
