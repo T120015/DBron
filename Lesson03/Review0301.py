@@ -46,5 +46,6 @@ x = np.array([np.min(siken["Eng"]),np.max("Eng")])
 # 回帰直線の計算と折れ線グラフ
 a,b = np.polyfit(siken["Eng"],siken["Jpn"])
 # 散布図
+plt.title("相関図")
 plt.figure()
 # EngとJpnの相関係数は1行2列，MathとJpnの相関係数は1行2列
