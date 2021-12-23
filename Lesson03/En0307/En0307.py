@@ -18,7 +18,7 @@ def index():
         if ip(i):
             print(i)
             num.append(i)
-    return rndtmp('index.html', title="10までの素数", msg=num)
+    return rndtmp('top.html', title="10までの素数", msg=num)
 
 
 app.run(host="127.0.0.1", port=5000, debug=True)
