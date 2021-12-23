@@ -1,7 +1,5 @@
 from flask import Flask as flk, render_template as rndtmp
-from numpy.lib.function_base import append
 from sympy import isprime as ip
-import numpy as np
 
 app = flk(__name__)
 
@@ -16,21 +14,23 @@ def index():
     num = []
     for i in range(10):
         if ip(i):
-            print(i)
             num.append(i)
-    return rndtmp('top.html', title="10までの素数", msg=num)
+    msg = """
+    素数は{}です.
+    """.format(num)
+    return rndtmp('top.html', title="10までの素数", msg=msg)
 
 
 @app.route("/sosuu/<n>")
 def Number(n):
     num = []
-    for i in range(int(num)):
+    for i in range(int(n)+1):
         if ip(i):
-            print(i)
             num.append(i)
     msg = """
     素数は{}です．
     """.format(num)
     return rndtmp('top.html', title="{}までの素数".format(n), msg=msg)
+
 
 app.run(host="127.0.0.1", port=5000, debug=True)
