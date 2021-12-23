@@ -1,4 +1,5 @@
 from flask import Flask as flk,render_template as rndtmp
+from numpy.lib.function_base import append
 from sympy import isprime as ip
 import numpy as np
 
@@ -13,7 +14,7 @@ def index():
   for i in range(10):
     if ip(i):
       print(i)
-      num = np.append(num, i)
-  return rndtmp("index.html",title="10までの素数", msg = num)
+      num = append(i)
+  return rndtmp('index.html',title="10までの素数", msg = num)
 
 app.run(host="127.0.0.1",port=5000)
