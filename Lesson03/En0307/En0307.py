@@ -11,10 +11,11 @@ def top():
 
 @app.route("/sosuu/")
 def index():
+  num = []
   for i in range(10):
     if ip(i):
       print(i)
-      num = append(i)
+      num.append(i)
   return rndtmp('index.html',title="10までの素数", msg = num)
 
 app.run(host="127.0.0.1",port=5000)
