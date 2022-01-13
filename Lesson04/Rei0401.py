@@ -42,10 +42,10 @@ b_val, p_val = bt(g_eng, g_none)
 # 平均値の検定 分散の検定により検定の種類が分かれる
 if(p_val >= 0.05):
     # 分散が等しい(p_val>=0.05)のときstudentのt検定(equal_var=True)
-    b_val, p_val = tt(g_eng, g_none, equal_var=True)
+    t_val, p_val = tt(g_eng, g_none, equal_var=True)
 else:
     # 分散が等しくない(p_val<0.05)のときweltchのt検定(equal_var=False)
-    b_val, p_val == tt(g_eng, g_none, equal_var=False)
+    t_val, p_val == tt(g_eng, g_none, equal_var=False)
 print(f"ttestの結果 p_value={p_val} ")
 
 # t検定をした結果，p_val>=0.05なら平均値に差がない，p_val<0.05なら平均値に差がある
