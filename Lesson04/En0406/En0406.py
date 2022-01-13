@@ -1,7 +1,7 @@
 from flask import Flask, render_template as retmp, request
 from mydblib2 import my_select as slc
 from scipy.stats import f_oneway as fone
-from Rei0402 import tukey_hsd as th
+from ..Rei0402 import tukey_hsd as th
 
 app = Flask(__name__, static_folder="static")
 
