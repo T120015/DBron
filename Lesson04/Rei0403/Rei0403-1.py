@@ -2,7 +2,6 @@
 # このプログラムは，グラフファイルを出力するので，実行するディレクトリが重要
 # En0401.pyが存在するディレクトリを，カレントディレクトリとして実行する
 
-from multiprocessing.spawn import import_main_path
 from flask import Flask, render_template, request
 from mydblib2 import my_select as slc
 # Flaskのコンストラクタ
