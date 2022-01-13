@@ -35,13 +35,13 @@ def top3():
 
     print("Year= {}, Area= {}\n".format(year, area))
 
-    sqlstr = """"
-    SELECT *
+    sqlstr = f"""
+    SELECT Month, Temp_mean
     FROM weather
-    WHERE AREA = '{}'
-    AND YEAR = {}
+    WHERE AREA = '{area}'
+    AND YEAR = {year}
     ;
-    """.format(area, year)
+    """
 
     weather = slc("webprog", sqlstr)
 
@@ -58,7 +58,7 @@ def top3():
     plt.close()
 
     return render_template(
-        "Rei403-table.html",
+        "Rei0403-table.html",
         title=title,
         cols=weather.columns,
         table_data=weather.values,

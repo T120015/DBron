@@ -45,7 +45,7 @@ if(p_val >= 0.05):
     t_val, p_val = tt(g_eng, g_none, equal_var=True)
 else:
     # 分散が等しくない(p_val<0.05)のときweltchのt検定(equal_var=False)
-    t_val, p_val == tt(g_eng, g_none, equal_var=False)
+    t_val, p_val = tt(g_eng, g_none, equal_var=False)
 print(f"ttestの結果 p_value={p_val} ")
 
 # t検定をした結果，p_val>=0.05なら平均値に差がない，p_val<0.05なら平均値に差がある
