@@ -40,7 +40,7 @@ print("平均:{}\n".format(result))
 # cram(塾)がenglishとnoneを抽出　score列のみ
 g_none = siken.query("club == 'none'")
 g_baseball = siken.query("club == 'baseball'")
-g_blassband = siken.query("club == 'blassband'")
+g_brassband = siken.query("club == 'brassband'")
 
 # 手順(1)3つ以上の母集団の平均値の検定は，1元配置分散分析 f_oneway を行う
 # b_val(検定値)，p_val(p値：有意水準　0.05未満なら分散が等しくない)
