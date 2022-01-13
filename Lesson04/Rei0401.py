@@ -16,12 +16,15 @@ sqlstring =  f"""
 #webprogデータベースのsiken1テーブルのレコードを読み込み
 siken = my_select( "webprog", sqlstring )
 #cramごとの平均値
-#【入力】
+result = siken.groupby("cram").mean()
 #それぞれの平均値を表示
-#【入力】
+#【入力】SELECT *
+print(f"平均値：{result['score']}")
+
 
 #英語塾に行っている人と，行っていない人の平均値に差があるか
-#【入力】
+g_eng = siken.query("cram === 'english'")
+g_none = siken.query("cram == 'none'")
 #print(f"g_eng \n{g_eng}") #for debug
 
 #手順(1)分散は等しいと仮定して良いかの検定
