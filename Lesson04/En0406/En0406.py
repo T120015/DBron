@@ -1,7 +1,7 @@
 from flask import Flask, render_template as retmp, request
 from mydblib2 import my_select as slc
 from scipy.stats import f_oneway as fone
-from ..Rei0402 import tukey_hsd as th
+from tukey import tukey_hsd as th
 
 app = Flask(__name__, static_folder="static")
 
@@ -21,17 +21,17 @@ def result():
     data = request.form["Data"]
 
     sqlstr = """
-    SELECT 
+    SELECT Month, {}
     FROM weather
     WHERE AREA = '{}'
     ;
-    """.format(area)
+    """.format(data, area)
 
     weather = slc("webprog", sqlstr)
 
-    g_f = weather.query("1960 <= Year <= 1979")[data]
-    g_s = weather.query("1980 <= Year <= 1999")[data]
-    g_t = weather.query("2000 <= Year <= 2019")[data]
+    g_f = weather.query("1960 <= Year < 1980")[data]
+    g_s = weather.query("1980 <= Year < 2000")[data]
+    g_t = weather.query("2000 <= Year < 2020")[data]
 
     b_val, p_val = fone(g_f, g_s, g_t)
 
