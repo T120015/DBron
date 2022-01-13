@@ -2,7 +2,9 @@
 # このプログラムは，グラフファイルを出力するので，実行するディレクトリが重要
 # En0401.pyが存在するディレクトリを，カレントディレクトリとして実行する
 
-from flask import Flask, render_template
+from multiprocessing.spawn import import_main_path
+from flask import Flask, render_template, request
+from mydblib2 import my_select as slc
 # Flaskのコンストラクタ
 app = Flask(__name__, static_folder="static")
 
@@ -24,6 +26,44 @@ def top2():
     return render_template("form.html",
                            title="地域，年度選択フォーム"
                            )
+
+
+@app.route("/search", methods=["POST"])
+def top3():
+    year = request.form["Year"]
+    area = request.form["Area"]
+
+    print("Year= {}, Area= {}\n".format(year, area))
+
+    sqlstr = """"
+    SELECT *
+    FROM weather
+    WHERE AREA = '{}'
+    AND YEAR = '{}'
+    ;
+    """.format(area, year)
+
+    weather = slc("webprog", sqlstr)
+
+    title = f"{area}の{year}年の月別平均気温"
+
+    import matplotlib.pyplot as plt
+    import japanize_matplotlib
+
+    plt.plot(weather["Month"], weather["Temp_mean"])
+    plt.title(title)
+    plt.xlabel("月")
+    plt.ylabel("温度")
+    plt.savefig("./static/Rei0403-2.png")
+    plt.close()
+
+    return render_template(
+        "Rei403-table.html",
+        title=title,
+        cols=weather.columns,
+        table_data=weather.values,
+        image="/static/Rei0403-2.png"
+    )
 
 
 # プログラム起動
