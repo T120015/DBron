@@ -12,7 +12,7 @@ FROM siken2
 ;
 """
 #dataの抽出
-siken = slc("web,prog", sqlstr)
+siken = slc("webprog", sqlstr)
 j_avg = siken["Jpn"].mean()
 m_avg = siken["Math"].mean()
 #平均
