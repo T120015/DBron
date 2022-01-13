@@ -7,9 +7,10 @@
     </head>
     <body>
         <h2>{{title}}</h2>
+        <p> {{message}} </p>
         <form action="/search" method="POST">
-            地域
-            <input type="radio" name="Area" value="Sapporo">Sapporo
+            地域<br>
+            <input type="radio" name="Area" value="Sapporo" checked>Sapporo
             <input type="radio" name="Area" value="Sendai">Sendai
             <input type="radio" name="Area" value="Tokyo">Tokyo
             <input type="radio" name="Area" value="Suwa">Suwa
@@ -17,8 +18,8 @@
             <input type="radio" name="Area" value="Osaka">Osaka
             <input type="radio" name="Area" value="Fukuoka">Fukuoka
             <input type="radio" name="Area" value="Naha">Naha<br>
-            気象データ
-            <input type="radio" name="Data" value="Temp_mean">月別平均気温
+            気象データ<br>
+            <input type="radio" name="Data" value="Temp_mean" checked>月別平均気温
             <input type="radio" name="Data" value="Temp_max">月別平均最高気温
             <input type="radio" name="Data" value="Temp_min">月別平均最低気温
             <input type="radio" name="Data" value="Precipitation">降水量
@@ -26,6 +27,5 @@
             <br>
             <input type="submit" value="Search">
         </form>
-        <pre>{{message}}</pre>
     </body>
 </html>
