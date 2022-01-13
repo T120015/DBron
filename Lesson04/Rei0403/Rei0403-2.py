@@ -32,7 +32,7 @@ def top2():
 @app.route("/search", methods=["POST"])
 def top3():
     # form変数を受け取り
-    # 【入力】
+
     print(f"Year ={Year}")  # for debug, output to terminal
     print(f"Area ={Area}")  # for debug, output to terminal
 
