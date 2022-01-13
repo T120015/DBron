@@ -12,7 +12,7 @@ weather = slc("webprog", sqlstr)
 result = weather.groupby('Area').mean()
 
 print("地区ごとの平均気温:\n{}".format(result.query(
-    "Area in ['Fukuoka' or 'Osaka' or 'Nagoya']")["Temp_mean"]))
+    "Area in ['Fukuoka','Osaka','Nagoya']")["Temp_mean"]))
 
 g_fukuoka = weather.query("Area == 'Fukuoka'")['Temp_mean']
 g_osaka = weather.query("Area == 'Osaka'")['Temp_mean']
