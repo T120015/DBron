@@ -27,7 +27,7 @@ print(f"平均値：{result['score']}")
 
 
 # 英語塾に行っている人と，行っていない人の平均値に差があるか
-g_eng = siken.query("cram === 'english'")['score']
+g_eng = siken.query("cram == 'english'")['score']
 g_none = siken.query("cram == 'none'")['score']
 # print(f"g_eng \n{g_eng}") #for debug
 
