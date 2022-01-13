@@ -12,4 +12,4 @@ WHERE YEAR = 2019
 weather = slc("webprog", sqlstr)
 result = weather.groupby("Area").mean()
 
-print(f"{result}")
+print(f"{result['Temp_mean']}")
