@@ -1,5 +1,5 @@
 import pandas as pd
-from scipy.stats import ttest_ind as tt, bartlett as bt
+from scipy.stats import ttest_rel as tt, bartlett as bt
 from mydblib2 import my_select as slc
 
 sqlstr = f"""
@@ -21,8 +21,8 @@ g_osaka = weather.query("Area == 'Osaka'")['Temp_mean']
 b_val, p_val = bt(g_tokyo, g_osaka)
 
 if(p_val >= 0.05):
-    t_val, p_val = tt(g_osaka, g_tokyo, equal_var=True)
+    t_val, p_val = tt(g_tokyo, g_osaka, equal_var=True)
 else:
-    t_val, p_val = tt(g_osaka, g_tokyo, equal_var=False)
+    t_val, p_val = tt(g_tokyo, g_osaka, equal_var=False)
 
 print(f"ttest p_val= {p_val}")
