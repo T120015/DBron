@@ -11,20 +11,20 @@ SELECT *
 FROM siken2
 ;
 """
-#dataの抽出
+# dataの抽出
 siken = slc("webprog", sqlstr)
 j_avg = siken["Jpn"].mean()
 m_avg = siken["Math"].mean()
-#平均
+# 平均
 print(f"数学平均：{m_avg}\n国語平均：{j_avg}")
-#f検定
-b_val, p_val = bt(m_avg,j_avg)
+# f検定
+b_val, p_val = bt(siken['Math'], siken['Jpn'])
 print(f"Bartlett p_val= {p_val}")
 
-#t検定
-if (p_val >=0.05):
-    t_val, p_val = tt(m_avg, j_avg,equal_var=True)
+# t検定
+if (p_val >= 0.05):
+    t_val, p_val = tt(siken['Math'], siken['Jpn'], equal_var=True)
 else:
-    t_val, p_val = tt(m_avg, j_avg,equal_var=False)
+    t_val, p_val = tt(siken['Math'], siken['Jpn'], equal_var=False)
 
 print(f"ttes p_val= {p_val}")
