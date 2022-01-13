@@ -21,8 +21,8 @@ g_osaka = weather.query("Area == 'Osaka'")['Temp_mean']
 b_val, p_val = bt(g_tokyo, g_osaka)
 
 if(p_val >= 0.05):
-    t_val, p_val = tt(g_tokyo, g_osaka, equal_var=True)
+    t_val, p_val = tt(g_tokyo, g_osaka)
 else:
-    t_val, p_val = tt(g_tokyo, g_osaka, equal_var=False)
+    t_val, p_val = tt(g_tokyo, g_osaka)
 
 print(f"ttest p_val= {p_val}")
