@@ -13,10 +13,10 @@ weather = slc("webprog", sqlstr)
 result = weather.groupby("Area").mean()
 
 print(
-    f"それぞれ平均:\n東京-{result['Temp_mean']['Tokyo']}, 大阪-{result['Temp_mean']['osaka']}\n")
+    f"それぞれ平均:\n東京-{result['Temp_mean']['Tokyo']}, 大阪-{result['Temp_mean']['Osaka']}\n")
 
 g_tokyo = weather.query("Area == 'Tokyo'")['Temp_mean']
-g_osaka = weather.query("Area == 'osaka'")['Temp_mean']
+g_osaka = weather.query("Area == 'Osaka'")['Temp_mean']
 
 b_val, p_val = bt(g_tokyo, g_osaka)
 
