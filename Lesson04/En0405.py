@@ -11,7 +11,7 @@ WHERE YEAR BETWEEN 2010 AND 2019
 weather = slc("webprog", sqlstr)
 result = weather.groupby('Area').mean()
 
-print("地区ごとの平均気温:\n{}".format(result.query("Area == 'Fukuoka'")["Temp_mean"]))
+print("地区ごとの平均気温:\n{}".format(result.query("Area == ('Fukuoka' or 'Osaka' or 'Nagoya')")["Temp_mean"]))
 
 g_fukuoka = weather.query("Area == 'Fukuoka'")['Temp_mean']
 g_osaka = weather.query("Area == 'Osaka'")['Temp_mean']
