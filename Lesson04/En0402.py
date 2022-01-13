@@ -1,4 +1,3 @@
-import imp
 import pandas as pd
 from mydblib2 import my_select as slc
 from scipy.stats import ttest_ind as tt, bartlett as bt
