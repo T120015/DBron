@@ -22,7 +22,7 @@ def result():
     data = request.form["Data"]
 
     sqlstr = """
-    SELECT Month, {}, Year
+    SELECT *
     FROM weather
     WHERE AREA = '{}'
     ;
