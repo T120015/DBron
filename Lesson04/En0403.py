@@ -9,5 +9,6 @@ FROM weather
 """
 
 weather = slc("webprog", sqlstr)
+result = weather.groupby("Temp_mean").mean()
 
-print(f"{weather}")
+print(f"{result}")
