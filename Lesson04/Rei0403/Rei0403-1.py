@@ -39,7 +39,7 @@ def top3():
     SELECT *
     FROM weather
     WHERE AREA = '{}'
-    AND YEAR = '{}'
+    AND YEAR = {}
     ;
     """.format(area, year)
 
