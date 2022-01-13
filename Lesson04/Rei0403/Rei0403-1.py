@@ -4,6 +4,7 @@
 
 from flask import Flask, render_template, request
 from mydblib2 import my_select as slc
+
 # Flaskのコンストラクタ
 app = Flask(__name__, static_folder="static")
 

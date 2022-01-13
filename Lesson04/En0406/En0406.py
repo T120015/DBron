@@ -1,3 +1,4 @@
+import pandas as pd
 from flask import Flask, render_template as retmp, request
 from mydblib2 import my_select as slc
 from scipy.stats import f_oneway as fone
@@ -32,8 +33,6 @@ def result():
     g_f = weather.query(" Year >= 1960 | Year < 1980")[data]
     g_s = weather.query(" Year >= 1980 | Year < 2000")[data]
     g_t = weather.query(" Year >= 2000 | Year < 2020")[data]
-
-    print(g_f)
 
     b_val, p_val = fone(g_f, g_s, g_t)
 
