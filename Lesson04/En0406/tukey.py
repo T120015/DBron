@@ -9,4 +9,4 @@ def tukey_hsd(ind, *args):
     ind_arr = np.array([])
     for x in range(len(args)):
         ind_arr = np.append(ind_arr, np.repeat(ind[x], len(args[x])))
-    print(pairwise_tukeyhsd(data_arr, ind_arr))
+    return pairwise_tukeyhsd(data_arr, ind_arr)
