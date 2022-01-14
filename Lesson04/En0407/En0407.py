@@ -22,32 +22,32 @@ def index():
 def result():
     area1 = request.form["Area1"]
     area2 = request.form["Area2"]
-    yaer1 = request.form["Yaer1"]
-    yaer2 = request.form["Yaer2"]
+    year1 = request.form["Year1"]
+    year2 = request.form["Year2"]
 
     sqlstr = f"""
-    SELECT Month,Year,Temp_mean
+    SELECT *
     FROM weather
     WHERE AREA IN ('{area1}', '{area2}')
     """
 
     weather = slc("webprog", sqlstr)
 
-    mid1 = yaer1 + 10
-    mid2 = yaer2 + 10
+    mid1 = int(year1) + 10
+    mid2 = int(year2) + 10
 
     result1 = weather.query(
-        f" Year >= {yaer1} & Year<{mid1} & Area == {area1}").groupby('Month', as_index=False)['Temp_mean']
+        f" Year >= {year1} & Year<{mid1} & Area == {area1}").groupby('Month', as_index=False)['Temp_mean']
     result2 = weather.query(
-        f" Year >= {yaer2} & Year<{mid2} & Area == {area2}").groupby('Month', as_index=False)['Temp_mean']
+        f" Year >= {year2} & Year<{mid2} & Area == {area2}").groupby('Month', as_index=False)['Temp_mean']
 
     t_val, p_val = tt(result1, result2)
     print(f"p_value={p_val:.3f}")
 
-    title = f"{area1}{yaer1}年代と{area2}{yaer2}年代の比較"
+    title = f"{area1}{year1}年代と{area2}{year2}年代の比較"
     path = "/static/En0407.png"
-    plt.plot(result1['Month'], result1['Temp_mean'], label=f"{area1}{yaer1}")
-    plt.plot(result2['Month'], result2['Temp_mean'], label=f"{area2}{yaer2}")
+    plt.plot(result1['Month'], result1['Temp_mean'], label=f"{area1}{year1}")
+    plt.plot(result2['Month'], result2['Temp_mean'], label=f"{area2}{year2}")
     plt.title(title)
     plt.xlabel("Month")
     plt.ylabel("Temp_mean")
