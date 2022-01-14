@@ -1,4 +1,6 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import japanize_matplotlib
 from flask import Flask, render_template as retmp, request
 from scipy.stats import f_oneway as fone
 from mydblib2 import my_select as slc
@@ -42,14 +44,23 @@ def result():
     print(f"一元配置分散分析 p_value={p_val:.3f}")
     redata = th(["Y1960-", "Y1980-", "Y2000-"],
                 g_f, g_s, g_t)
+    title="{},{}の一元配置分散分析結果".format(area, data),
+    path = "/static/En0406.png"
+    plt.plot(weather['Month'],weather[data])
+    plt.title(title)
+    plt.xlabel("Month")
+    plt.ylabel(data)
+    plt.savefig(f".{path}")
+    plt.close()
 
     return retmp(
         "result.html",
-        title="{},{}の一元配置分散分析結果".format(area, data),
+        title = title,
         message=f"一元配置分散分析: p_value={p_val: .3f}",
         redata = redata,
         cols=result.columns,
         table_data=result.values
+        image = path
     )
 
 
