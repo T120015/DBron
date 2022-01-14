@@ -29,7 +29,7 @@ def result():
     """
 
     weather = slc("webprog", sqlstr)
-
+    print(weather)
     g_f = weather.query(" Year >= 1960 | Year < 1980")[data]
     g_s = weather.query(" Year >= 1980 | Year < 2000")[data]
     g_t = weather.query(" Year >= 2000 | Year < 2020")[data]
