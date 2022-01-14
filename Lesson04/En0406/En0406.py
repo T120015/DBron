@@ -29,10 +29,9 @@ def result():
     """
 
     weather = slc("webprog", sqlstr)
-    print(weather)
-
+    
+    
     result = weather.groupby('Month').mean()
-    print(result)
 
     g_f = weather.query(" Year >= 1960 & Year < 1980")[data]
     g_s = weather.query(" Year >= 1980 & Year < 2000")[data]
