@@ -21,12 +21,12 @@ def result():
     area = request.form["Area"]
     data = request.form["Data"]
 
-    sqlstr = """
+    sqlstr = f"""
     SELECT *
     FROM weather
-    WHERE AREA = '{}'
+    WHERE AREA = '{area}'
     ;
-    """.format(data, area)
+    """
 
     weather = slc("webprog", sqlstr)
 

@@ -33,6 +33,7 @@ FROM siken1
 """
 # webprogデータベースのsiken1テーブルのレコードを読み込み
 siken = my_select("webprog", sqlstring)
+print(siken)
 # クラブ活動別に平均値の表示
 result = siken.groupby("club").mean()
 print("平均:{}\n".format(result))
