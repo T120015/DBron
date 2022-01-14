@@ -1,4 +1,3 @@
-from tkinter import Y
 import pandas as pd
 import matplotlib.pyplot as plt
 import japanize_matplotlib
@@ -33,21 +32,23 @@ def result():
 
     weather = slc("webprog", sqlstr)
 
-    mid1 = int(year1) + 10
-    mid2 = int(year2) + 10
+    mid1 = str(int(year1) + 10)
+    mid2 = str(int(year2) + 10)
 
     result1 = weather.query(
-        f" Year >= {year1} & Year<{mid1} & Area == {area1}").groupby('Month', as_index=False)['Temp_mean']
+        f" Year >= {year1} & Year<{mid1}").groupby('Month', as_index=False).mean()
     result2 = weather.query(
-        f" Year >= {year2} & Year<{mid2} & Area == {area2}").groupby('Month', as_index=False)['Temp_mean']
+        f" Year >= {year2} & Year<{mid2}").groupby('Month', as_index=False).mean()
 
-    t_val, p_val = tt(result1, result2)
+    t_val, p_val = tt(result1["Temp_mean"], result2["Temp_mean"])
     print(f"p_value={p_val:.3f}")
+    name1 = f"{area1}{year1}年代"
+    name2 = f"{area2}{year2}年代"
 
-    title = f"{area1}{year1}年代と{area2}{year2}年代の比較"
+    title = f"{name1}と{name2}の比較"
     path = "/static/En0407.png"
-    plt.plot(result1['Month'], result1['Temp_mean'], label=f"{area1}{year1}")
-    plt.plot(result2['Month'], result2['Temp_mean'], label=f"{area2}{year2}")
+    plt.plot(result1['Month'], result1['Temp_mean'], label=name1)
+    plt.plot(result2['Month'], result2['Temp_mean'], label=name2)
     plt.title(title)
     plt.xlabel("Month")
     plt.ylabel("Temp_mean")
@@ -58,12 +59,17 @@ def result():
     df = pd.DataFrame([result1["Month"], result1['Temp_mean'],
                       result2['Temp_mean']])
 
+    message = f"t検定: p_value={p_val: .3f}"
+    if (p_val < 0.05):
+        message += "‐有意差あり"
+    else:
+        message += "‐有意差なし"
     # print(result1)
     return retmp(
         "result.html",
         title=title,
-        message=f"t検定: p_value={p_val: .3f}",
-        cols=["月", "Y1960-", "Y1980-", "Y2000-"],
+        message=message,
+        cols=["Month", name1, name2],
         table_data=df.T.values,
         image=path
     )
