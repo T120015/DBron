@@ -31,7 +31,7 @@ def result():
     weather = slc("webprog", sqlstr)
     
     
-    result = weather.groupby('Month').get_group(data)
+    result = weather.groupby('Month').mean()
     print(result)
 
     g_f = weather.query(" Year >= 1960 & Year < 1980")[data]
@@ -48,8 +48,8 @@ def result():
         title="{},{}の一元配置分散分析結果".format(area, data),
         message=f"一元配置分散分析: p_value={p_val: .3f}",
         redata = redata,
-        cols=weather.columns,
-        table_data=weather.values
+        cols=result.columns,
+        table_data=result.values
     )
 
 
