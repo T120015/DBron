@@ -34,7 +34,7 @@ def result():
 
     result = weather.query(
         " Year >= 1960 & Year < 1980").groupby('Month').mean()
-    print(result[data])
+    print(result.columns)
 
     g_f = weather.query(" Year >= 1960 & Year < 1980")[data]
     g_s = weather.query(" Year >= 1980 & Year < 2000")[data]
@@ -46,7 +46,7 @@ def result():
                 g_f, g_s, g_t)
     title = f"{area},{data}の一元配置分散分析結果"
     path = "/static/En0406.png"
-    plt.plot(result['Year'], result[data])
+    plt.plot(result.columns, result[data])
     plt.title(title)
     plt.xlabel("Month")
     plt.ylabel(data)
