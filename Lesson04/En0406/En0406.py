@@ -58,7 +58,7 @@ def result():
         title=title,
         message=f"一元配置分散分析: p_value={p_val: .3f}",
         redata=redata,
-        cols=result.columns,
+        cols=result[data].columns,
         table_data=result.values,
         image=path
     )
