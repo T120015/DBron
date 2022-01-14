@@ -31,12 +31,12 @@ def result():
     weather = slc("webprog", sqlstr)
     
     
-    result = weather.groupby('Month').mean()
+    result = weather.groupby('Month').get_group(area)
+    print(result)
 
     g_f = weather.query(" Year >= 1960 & Year < 1980")[data]
     g_s = weather.query(" Year >= 1980 & Year < 2000")[data]
     g_t = weather.query(" Year >= 2000 & Year < 2020")[data]
-    print(g_f)
 
     b_val, p_val = fone(g_f, g_s, g_t)
     print(f"一元配置分散分析 p_value={p_val:.3f}")
