@@ -46,7 +46,7 @@ def result():
                 g_f, g_s, g_t)
     title = f"{area},{data}の一元配置分散分析結果"
     path = "/static/En0406.png"
-    plt.plot(weather['Month'], weather[data])
+    plt.plot(result['Year'], result[data])
     plt.title(title)
     plt.xlabel("Month")
     plt.ylabel(data)
@@ -58,7 +58,7 @@ def result():
         title=title,
         message=f"一元配置分散分析: p_value={p_val: .3f}",
         redata=redata,
-        cols=result[data],
+        cols=result.columns,
         table_data=result.values,
         image=path
     )
