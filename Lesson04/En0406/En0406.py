@@ -22,6 +22,7 @@ def index():
 def result():
     area = request.form["Area"]
     data = request.form["Data"]
+    month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
     sqlstr = f"""
     SELECT Month,Year,{data}
@@ -32,9 +33,9 @@ def result():
 
     weather = slc("webprog", sqlstr)
 
-    result = weather.query(
+    result1 = weather.query(
         " Year >= 1960 & Year < 1980").groupby('Month').mean()
-    print(result.columns)
+    print(weather.columns)
 
     g_f = weather.query(" Year >= 1960 & Year < 1980")[data]
     g_s = weather.query(" Year >= 1980 & Year < 2000")[data]
@@ -46,7 +47,7 @@ def result():
                 g_f, g_s, g_t)
     title = f"{area},{data}の一元配置分散分析結果"
     path = "/static/En0406.png"
-    plt.plot(result.columns, result[data])
+    plt.plot(month, result1[data], label="Y1960-")
     plt.title(title)
     plt.xlabel("Month")
     plt.ylabel(data)
@@ -58,8 +59,8 @@ def result():
         title=title,
         message=f"一元配置分散分析: p_value={p_val: .3f}",
         redata=redata,
-        cols=result.columns,
-        table_data=result.values,
+        cols=weather.groupby('Year').mean().columns,
+        table_data=result1.values,
         image=path
     )
 
