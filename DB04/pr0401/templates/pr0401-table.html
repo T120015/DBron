@@ -1,0 +1,26 @@
+<!-- pr0401-table.html -->
+<!doctype html>
+<html lang="ja">
+    <head>
+        <title>{{title}}</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h2>{{title}}</h2>
+        <table border="1">
+        <tr>
+        {% for item in  table_data.columns %}
+        <th>{{item}}</th>
+        {% endfor %}
+        </tr>
+        {% for rows in table_data.values %}
+            <tr>
+            {% for item in rows %}
+                <td>{{item}}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+        </table>
+
+    </body>
+</html>

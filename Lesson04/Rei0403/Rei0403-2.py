@@ -2,7 +2,7 @@
 # このプログラムは，グラフファイルを出力するので，実行するディレクトリが重要
 # En0401.pyが存在するディレクトリを，カレントディレクトリとして実行する
 
-from flask import Flask, render_template  # 【入力】
+from flask import Flask, render_template, request  # 【入力】
 # Flaskのコンストラクタ
 app = Flask(__name__, static_folder="static")
 
@@ -32,6 +32,8 @@ def top2():
 @app.route("/search", methods=["POST"])
 def top3():
     # form変数を受け取り
+    Year = request.form["Year"]
+    Area = request.form["Area"]
 
     print(f"Year ={Year}")  # for debug, output to terminal
     print(f"Area ={Area}")  # for debug, output to terminal

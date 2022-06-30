@@ -1,7 +1,7 @@
 import pandas as pd
 from scipy.stats import f_oneway as fone
 from mydblib2 import my_select as slc
-from Rei0402 import tukey_hsd as th
+from tukey import tukey_hsd as th
 # SQLからのdata取得
 sqlstr = f"""
 SELECT *
@@ -21,5 +21,5 @@ g_osaka = weather.query("Area == 'Osaka'")['Temp_mean']
 g_nagoya = weather.query("Area == 'Nagoya'")['Temp_mean']
 # 出力
 b_val, p_val = fone(g_fukuoka, g_osaka, g_nagoya)
-print(f"一元配置分散分析 p_val= {p_val:.3f}")
-th(['Fukuoka', 'Osaka', 'Nagoya'], g_fukuoka, g_osaka, g_nagoya)
+tukey = th(['Fukuoka', 'Osaka', 'Nagoya'], g_fukuoka, g_osaka, g_nagoya)
+print(f"一元配置分散分析 p_val= {p_val:.3f}\n{tukey}")

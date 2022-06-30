@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h2>{{title}}</h2>
+    {{msg}}
+    <form action="/tantou2" method="post">
+        <select name="tantou">
+        {% for item in table_data %}
+            <option value="{{item}}">{{item}}</option>
+        {% endfor %}
+        </select>
+        <br>
+        <input type="submit" value="表示">
+        <input type="reset" value="リセット">
+    </form>
+</body>
+</html>

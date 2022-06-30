@@ -1,7 +1,42 @@
 {
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
+    "python.autoComplete.extraPaths": [
+        "/usr/local/lib/python3.10/site-packages/"
+    ],
     "code-runner.executorMap": {
-    "python":"cd $dir && /workdir/log/WP_py.sh $fileName",
-    }
+        "python": "cd $dir && python $fileName",
+    },
+    "files.associations": {"*.html": "jinja-html"},
+    "emmet.includeLanguages": {
+        "jinja-html": "html"
+    },
+    "[jinja-html]": {
+        "editor.formatOnSave": false
+    },
+    "[cpp]": {
+        "editor.quickSuggestions": {
+            "comments": "on",
+            "strings": "on",
+            "other": "on"
+        }
+    },
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "172.30.0.10",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "Webprog",
+            "database": "dbron04",
+            "username": "root",
+            "password": "1234"
+        }
+    ],
+    "python.analysis.extraPaths": [
+        "/usr/local/lib/python3.10/site-packages/"
+    ],
 }

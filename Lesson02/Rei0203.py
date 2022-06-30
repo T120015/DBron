@@ -32,7 +32,7 @@ taijyuu = np.array( np.random.normal(57,10,30) )
 plt.xlabel("height" )
 plt.ylabel("weight" )
 #散布図のパラメータを設定する
-【入力】
+#plt.scatter(x, y)
 #回帰直線のグラフ表示
 #plt.plot(x,y,label=f"y={a}x+{b}")
 #凡例とグラフ表示/出力

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>郵便番号</title>
+</head>
+<body>    
+    <h1>{{title}}郵便番号検索ページ</h1>
+    {% if title != '地域' %}
+    <table border>
+        <tr>
+            {% for item in cols %}
+            <th>{{item}}</th>
+            {% endfor %}
+        </tr>
+        {% for rows in msg %}
+        <tr>
+            {% for item in rows %}
+            <td>{{item}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    
+    </table>
+    {% endif %}
+</body>
+</html>

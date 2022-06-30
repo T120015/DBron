@@ -7,7 +7,7 @@ prefecture = ["茨城","栃木","群馬","埼玉","千葉","東京","神奈川"]
 h_wage = [879,882,865,956,953,1041,1040]
 
 #棒グラフの設定
-【入力】
+plt.bar(prefecture,h_wage)
 plt.title("Hourly wage")
 plt.xlabel("Prefecture")
 plt.ylabel("Yen")

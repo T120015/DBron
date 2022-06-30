@@ -36,12 +36,12 @@ def result():
     mid2 = str(int(year2) + 10)
 
     result1 = weather.query(
-        f" Year >= {year1} & Year<{mid1}").groupby('Month', as_index=False).mean()
+        f"{year1} <= Year < {mid1} & Area == '{area1}'").groupby('Month', as_index=False).mean()
     result2 = weather.query(
-        f" Year >= {year2} & Year<{mid2}").groupby('Month', as_index=False).mean()
+        f"{year2} <= Year < {mid2} & Area == '{area2}'").groupby('Month', as_index=False).mean()
 
     t_val, p_val = tt(result1["Temp_mean"], result2["Temp_mean"])
-    print(f"p_value={p_val:.3f}")
+
     name1 = f"{area1}{year1}年代"
     name2 = f"{area2}{year2}年代"
 
@@ -59,8 +59,8 @@ def result():
     df = pd.DataFrame([result1["Month"], result1['Temp_mean'],
                       result2['Temp_mean']])
 
-    message = f"t検定: p_value={p_val: .3f}"
-    if (p_val < 0.05):
+    message = f"t検定: p_value={p_val}"
+    if (p_val <= 0.05):
         message += "‐有意差あり"
     else:
         message += "‐有意差なし"
@@ -70,7 +70,7 @@ def result():
         title=title,
         message=message,
         cols=["Month", name1, name2],
-        table_data=df.T.values,
+        table_data=df.T.round(1).values,
         image=path
     )
 

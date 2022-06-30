@@ -18,6 +18,7 @@ siken["Hensa"] = ( siken["Total"] - mean )/std * 10 + 50
 
 #クラスごとに平均値の計算
 #【入力】
+result = mean
 print(f"クラスごとの平均値\n{result}")
 
 plt.bar(range(len(result.index)),result["Total"],tick_label=result.index)
