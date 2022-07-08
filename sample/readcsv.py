@@ -18,7 +18,6 @@ fns = [
     "./koudou.csv", "./koudou2.csv"
     ]
 
-
 def csv2df(tableName: str):
     dbcon, cur = my_open(**dsn)
     dt_now = dt.now()
@@ -34,6 +33,7 @@ def csv2df(tableName: str):
     into += "lastupdate"
 
     df = pd.read_csv(fn, header=0)
+    #print(df)
     for ind, datas in df.iterrows():
         data = ""
         for item in datas:
