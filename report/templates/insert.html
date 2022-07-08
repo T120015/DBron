@@ -5,10 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h2>{{title}}</h2>
-{{msg}}
+    <h1>{{title}}</h1>
+    区分
+    <select name="position" id="posi">
+        {% for data in table_data %}
+            <option value="{{data}}">{{data}}</option>
+        {% endfor %}
+    </select>
+    部類
+    
 </body>
 </html>
