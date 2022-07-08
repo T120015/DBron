@@ -366,18 +366,17 @@ def insert():
     position = list(recset['position'])
 
     sql = f"""
-        select distinct class
+        select class
         from school
         ;
     """
     my_query(sql, cur)
     recset = pd.DataFrame(cur.fetchall())
     cls = list(recset['class'])
-
     my_close(dbcon, cur)
 
     return render_template(
-        "insert.html",
+        "form_input.html",
         title="関係者追加",
         input_position=position,
         input_class=cls
@@ -411,7 +410,7 @@ def update1():
             title="アクセスできません",
             msg = "このアカウントは管理者権限がありません."
         )
-        
+
     return render_template(
         "form_input.html",
     )

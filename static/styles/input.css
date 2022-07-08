@@ -1,3 +1,11 @@
 .school {
     display: flex;
+    margin: 10px;
+}
+
+dt {
+    margin-left: 5px;
+}
+dd {
+    margin-left: 15px;
 }
