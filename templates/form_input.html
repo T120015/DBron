@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content=ce-width, initial-scale=1.0">
     <title>{{title}}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='styles/input.css')}}">
     <script src="{{url_for('static', filename='scripts/input.js')}}"></script>
@@ -14,27 +14,42 @@
 </head>
 <body>
     <h1>{{title}}</h1>
-    <form action="" method="post">
-    <dl class="school">
-    <dd>区分</dd>  
-    <dt><select name="position" id="posi"></select></dt>
-    <dd>部類</dd>
-    <dt><select name="class" id="cls"></select></dt>
-    </dl>
-    <dl class="school">
-        <dd>氏名</dd>
-        <dt><input type="text" name="namae"></dt>
-        <dd>年齢</dd>
-        <dt><input type="num" size="10" name="age"></dt>
-    </dl>
-    <dl class="school">
-        <dd>性別</dd>
-        <dt>
-        <input type="radio" name="gender" value="男" checked>男
-        <input type="radio" name="gender" value="女">女
-        </dt>
-    </dl>
+    <form action="/manage/insert1" method="post">
+        <table border>
+        <tr>
+        <th>区分</th>  
+        <td><select name="position" id="posi"></select></td>
+        <th>部類</th>
+        <td><select name="class" id="cls"></select></td>
+        </tr>
+        <tr>
+            <th>氏名</th>
+            <td><input type="text" name="namae"></td>
+        </tr>
+        <tr>
+            <th>性別</th>
+            <td>
+            <input type="radio" class="gender" name="gender" value="男" checked>男
+            <input type="radio" class="gender" name="gender" value="女">女
+            </td>
+            <th>年齢</th>
+            <td><input type="number" min=0 class="stext" name="age"></td>
+        </tr>
+        <tr>
+            <th>電話番号</th>
+            <td><input type="tel" name="phone"></td>
+        </tr>
+        <tr>
+            <th>E-mail</th>
+            <td><input type="email" name="email"></td>
+        </tr>
+        <tr>
+            <th>所属部署</th>
+            <td><input type="text" name="faculty"></td>
+        </tr>
+        </table>
+        <input type="submit" class="btn" value="追加">
+        <a href="/manage"><input type="button" class="btn" value="戻る"></a>
     </form>
-    
 </body>
 </html>

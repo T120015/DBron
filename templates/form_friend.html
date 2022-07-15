@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <title>{{title}}</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h2>{{title}}</h2>
+        {{msg}}
+        <form action="/friend" method="POST">
+            同行者学籍番号<br>
+            {% for i in range(num) %}
+                {{loop.index}}人目<input type="text" name="friendcode{{loop.index}}"><br>
+            {% endfor %}
+            <input type="hidden" name="num" value={{num}}>
+            <input type="submit" value="完了">
+            <input type="reset" value="リセット"> 
+        </form>
+    </body>
+</html>

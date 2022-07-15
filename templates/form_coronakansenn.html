@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <title>{{title}}</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h2>{{title}}</h2>
+        <form action="/kenkou1" method="POST">
+            コロナ感染<input type="radio" name="kansenn" value="0">
+            濃厚接触者<input type="radio" name="kansenn" value="1" checked><br>
+            感染した日<input type="date" name="coronakansennbi" value="2020-01-01"><br>
+            <br>
+            <input type="submit" value="完了">
+            <input type="reset" value="reset"> 
+        </form>
+        <pre>{{message}}</pre>
+    </body>
+</html>

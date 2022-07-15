@@ -48,6 +48,3 @@ def csv2df(fn):
     print(f"{fn}から{len(df)}レコードを新規挿入しました")
 
     my_close(dbcon, cur)
-
-
-

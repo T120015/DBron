@@ -1,11 +1,30 @@
-.school {
-    display: flex;
-    margin: 10px;
+tr {
+    display: table;
+    width: 305px;
 }
 
-dt {
-    margin-left: 5px;
+th {
+    width: 65px;
 }
-dd {
-    margin-left: 15px;
+
+.stext{
+    width: 60px;
+}
+
+select {
+    width: 75px;
+}
+
+input {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+input.btn{
+    width: 10%;
+    text-align: center
+}
+
+.gender {
+    width: min-content;
 }

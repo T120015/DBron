@@ -4,22 +4,83 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>{{title}}</title>
 </head>
 <body>
     <h2>{{title}}</h2>
-    <form action="koudou2" method="post">
-        行動日<input type="date" name="action"><br>
-        開始時間<input type="time" name="start">
-        終了時間<input type="time" name="end"><br>
-        行先<input type="text" name="location" placeholder = "例：実家">
-        移動方法<input type="text" name="move" placeholder = "例：車"><br>
-        出発地<input type="text" name="departure" placeholder = "例：草加市のアパート">
-        目的地<input type="text" name="arrival" placeholder = "例：〇〇県〇〇市"><br>
-        同行者<br>有<input type="radio" name="companions" value = "1">
-        無<input type="radio" name="companions" value = "0">
-        <br><input type="submit" value="提出">
-        <input type="reset" value="リセット">
+    <form action="/koudou1" method="post">
+        <table>
+        <tr>
+        <td>行動日</td>
+        <td><input type="date" name="action" id = "action" required></td>
+        </tr>
+        <tr>
+        <td>開始時間</td>
+        <td><select name="start">
+            {% for i in range(24) %}
+                {% for j in range(0, 60, 5) %}
+                    <option value="{{ '%02d' % i}}:{{ '%02d' % j}}">{{'%02d'%i}}:{{'%02d'%j}}</option>
+                {% endfor %}
+            {% endfor %}
+        </select></td>
+        </tr>
+        <tr>
+        <td>終了時間</td>
+        <td><select name="end">
+            {% for i in range(24) %}
+                {% for j in range(0, 60, 5) %}
+                    <option value="{{ '%02d' % i}}:{{ '%02d' % j}}">{{'%02d'%i}}:{{'%02d'%j}}</option>
+                {% endfor %}
+            {% endfor %}
+        </select></td>
+        </tr>
+        <tr>
+        <td>行先</td>
+        <td><input type="text" name="location" placeholder = "例：実家"></td>
+        </tr>
+        <tr>
+        <td>移動方法</td>
+        <td><input type="text" name="move" placeholder = "例：車"></td>
+        </tr>
+        <tr>
+        <td>出発地</td>
+        <td><input type="text" name="departure" placeholder = "例：草加市のアパート"></td>
+        </tr>
+        <tr>
+        <td>目的地</td>
+        <td><input type="text" name="arrival" placeholder = "例：〇〇県〇〇市"></td>
+        </tr>
+        <tr>
+        <td>同行者</td>
+        <td>有<input type="radio" name="companions" value = "1" id = "companions" onchange="radio()">
+        無<input type="radio" name="companions" value = "0" id = "conpanions" onchange="radio()" checked></td>
+        </tr>
+        </table>
+        <br>
+
+        <input type="submit" value="提出" id = "submit">
+        <a href="/"><input type="button" value="戻る"></a>
     </form>
+    <script defer>
+        var element_companions = document.getElementsByName('companions');
+        var element_submit = document.getElementById('submit');
+        var element_action = document.getElementById('action');
+        var now = new Date();
+        function radio() {
+            if(element_companions[0].checked){
+                element_submit.value = "次へ";
+            }
+            if(element_companions[1].checked){
+                element_submit.value = "提出";
+            }
+        }
+        window.onload = function(){
+            if (element_action.value == ""){
+                element_action.value = now.getFullYear() + '-' + ( '0' + (now.getMonth() + 1) ).slice( -2 ) + '-' + ( '0' + now.getDate() ).slice( -2 );
+            }
+            
+        }
+    </script>
 </body>
 </html>
