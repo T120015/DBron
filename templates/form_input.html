@@ -10,11 +10,13 @@
     <script type="text/javascript">
         let posi_list = {{input_position | tojson}};
         let cls_list = {{input_class | tojson}};
+        let position = {{position | tojson}};
+        let clas = {{cls | tojson}};
     </script>
 </head>
 <body>
     <h1>{{title}}</h1>
-    <form action="/manage/insert1" method="post">
+    <form action="/manage/{{to_url}}" method="post">
         <table border>
         <tr>
         <th>区分</th>  
@@ -24,32 +26,37 @@
         </tr>
         <tr>
             <th>氏名</th>
-            <td><input type="text" name="namae"></td>
+            <td><input type="text" name="namae" value="{{name}}"></td>
         </tr>
         <tr>
             <th>性別</th>
             <td>
+            {% if gender == "女" %}
+            <input type="radio" class="gender" name="gender" value="男">男
+            <input type="radio" class="gender" name="gender" value="女" checked>女
+            {% else %}
             <input type="radio" class="gender" name="gender" value="男" checked>男
             <input type="radio" class="gender" name="gender" value="女">女
+            {% endif %}
             </td>
             <th>年齢</th>
-            <td><input type="number" min=0 class="stext" name="age"></td>
+            <td><input type="number" min=0 class="stext" name="age" value={{age}}></td>
         </tr>
         <tr>
             <th>電話番号</th>
-            <td><input type="tel" name="phone"></td>
+            <td><input type="tel" name="phone" value="{{phone}}"></td>
         </tr>
         <tr>
             <th>E-mail</th>
-            <td><input type="email" name="email"></td>
+            <td><input type="email" name="email" value="{{email}}"></td>
         </tr>
         <tr>
             <th>所属部署</th>
-            <td><input type="text" name="faculty"></td>
+            <td><input type="text" name="faculty" value="{{faculty}}"></td>
         </tr>
         </table>
         <input type="submit" class="btn" value="追加">
-        <a href="/manage"><input type="button" class="btn" value="戻る"></a>
+        <a href="/manage{{url}}"><input type="button" class="btn" value="戻る"></a>
     </form>
 </body>
 </html>

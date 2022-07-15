@@ -45,6 +45,6 @@ def csv2df(fn):
         my_query(sql, cur)
 
     dbcon.commit()
-    print(f"{fn}から{len(df)}レコードを新規挿入しました")
-
     my_close(dbcon, cur)
+    return f"{fn.filename}から{len(df)}レコードを新規挿入しました"
+
