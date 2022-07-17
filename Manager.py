@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from MyDatabase import my_open, my_query, my_close
 import pandas as pd
@@ -25,7 +26,7 @@ def checkManager():
         )
 
 
-@mng.route("/")
+@mng.route("/", methods=['get', 'post'])
 def manage():
     # 管理者メニュー
     return render_template(
@@ -36,24 +37,31 @@ def manage():
 
 @mng.route("/table")
 def table():
+    # 一覧表示
     dbcon, cur = my_open(**dsn)
     sql = f"""
         select *
         from acount
+        where delflag = 0
         ;
     """
+    column_list = ['CODE', '区分', '部類', 'PASSWORD', '氏名',
+                   '年齢', '性別', '電話番号', 'メール', '所属部所', '最終更新日']
     my_query(sql, cur)
     recset = pd.DataFrame(cur.fetchall())
 
     return render_template(
-        "table.html",
+        "manage_table.html",
         title="関係者一覧",
-        table_data=recset.loc[:, 'clientcode':].sort_values('clientcode')
+        column_list=column_list,
+        table_data=recset.loc[:, 'clientcode':'lastupdate'].sort_values(
+            'clientcode')
     )
 
 
 @mng.route("/insert")
 def insert():
+    # 関係者追加
     dbcon, cur = my_open(**dsn)
     sql = f"""
         select distinct position
@@ -75,7 +83,7 @@ def insert():
     my_close(dbcon, cur)
 
     return render_template(
-        "form_input.html",
+        "manage_input.html",
         title="関係者追加",
         input_position=position,
         input_class=cls,
@@ -86,44 +94,109 @@ def insert():
     )
 
 
+@mng.route("/insert1", methods=['post'])
+def insert1():
+    position = request.form['position']
+    cls = request.form['class']
+    code = request.form['clientcode']
+    password = request.form['pass']
+    namae = request.form['namae']
+    gender = request.form['gender']
+    age = request.form['age']
+    phone = request.form['phone']
+    email = request.form['email']
+    faculty = request.form['faculty']
+
+    dbcon, cur = my_open(**dsn)
+    sql = f"""
+        select *
+        from school
+        where position = '{position}'
+        and class = '{cls}'
+    """
+    my_query(sql, cur)
+    df = pd.DataFrame(cur.fetchall())
+    sql = f"""
+        insert into client
+        (schoolID, clientcode, pass, namae, age, gender, phone, email, faculty)
+        value
+        ({df['schoolID'][0]}, '{code}', '{password}', '{namae}', {age}, '{gender}', '{phone}', '{email}','{faculty}')
+    """
+    my_query(sql, cur)
+    dbcon.commit()
+    my_close(dbcon, cur)
+
+    return render_template(
+        "manage_msg.html",
+        title="関係者追加完了",
+        message=f"{code}:{namae}を追加しました．"
+    )
+
+
 @mng.route("/insert_files")
 def insert_files():
+    # ファイル読み込み
     return render_template(
-        "form_files.html",
+        "manage_files.html",
         title="関係者追加"
     )
 
 
-@mng.route("/insert_files1")
-def insert_files1():
+@mng.route("/upload_csv", methods=['post'])
+def upload_csv():
     # csvFileの受け取り
-    csv_file = request['upfile']
+    csv_file = request.files['upfile']
     msg = csv2df(csv_file)
 
     return render_template(
-        "msg.html",
+        "manage_msg.html",
         title="追加完了",
-        msg=msg
+        message=msg
     )
 
 
-@mng.route("/update")
-def update():
+@mng.route("/select")
+def select():
+    # 関係者編集
+    return render_template(
+        "manage_select.html",
+        title="関係者情報編集"
+    )
+
+
+@mng.route("/select1", methods=['post'])
+def select1():
+    code = request.form['clientcode']
     dbcon, cur = my_open(**dsn)
-    sql = f""""
+
+    sql = f"""
         select *
         from acount
+        where clientcode = '{code}'
+        and delflag = 0
         ;
     """
+    my_query(sql, cur)
+    recset = pd.DataFrame(cur.fetchall())
+    print(recset["namae"])
     return render_template(
-        "select.html",
-        title="関係者情報編集",
-        table_data=table
+        "manage_show.html",
+        title=f"{code}の編集",
+        name=recset["namae"][0],
+        gender=recset["gender"][0],
+        age=recset["age"][0],
+        phone=recset["phone"][0],
+        email=recset["email"][0],
+        faculty=recset["faculty"][0],
+        position=recset["position"][0],
+        cls=recset["class"][0],
+        code=code,
+        url="/delete"
     )
 
 
-@mng.route("/update1", methods=['post'])
-def update1():
+@mng.route("/update", methods=['post'])
+def update():
     code = request.form['clientcode']
     dbcon, cur = my_open(**dsn)
     sql = f"""
@@ -148,18 +221,17 @@ def update1():
         select *
         from acount
         where clientcode = '{code}'
+        and delflag = 0
         ;
     """
     my_query(sql, cur)
     recset = pd.DataFrame(cur.fetchall())
-    print(recset["namae"])
     return render_template(
-        "form_input.html",
+        "manage_input.html",
         title=f"{code}の編集",
         input_position=position,
         input_class=cls,
-        url="/update",
-        to_url="/update2",
+        url="/select1",
         name=recset["namae"][0],
         gender=recset["gender"][0],
         age=recset["age"][0],
@@ -167,33 +239,76 @@ def update1():
         email=recset["email"][0],
         faculty=recset["faculty"][0],
         position=recset["position"][0],
-        cls=recset["class"][0]
+        cls=recset["class"][0],
+        code=code
     )
 
 
-@mng.route("/delete")
+@mng.route("/delete", methods=['post'])
 def delete():
-
-    return render_template(
-        "select.html",
-        title="関係者情報削除"
-    )
-
-
-# manage テーブル表示
-@mng.route("/kirokunasi")
-def kirokunasi():
-
+    code = request.form['clientcode']
     dbcon, cur = my_open(**dsn)
 
-    sqlstring = f"""
+    sql = f"""
+        select *
+        from acount
+        where clientcode = '{code}'
+        and delflag = 0
+        ;
+    """
+    my_query(sql, cur)
+    recset = pd.DataFrame(cur.fetchall())
+    return render_template(
+        "manage_show.html",
+        title=f"{code}の削除",
+        name=recset["namae"][0],
+        gender=recset["gender"][0],
+        age=recset["age"][0],
+        phone=recset["phone"][0],
+        email=recset["email"][0],
+        faculty=recset["faculty"][0],
+        position=recset["position"][0],
+        cls=recset["class"][0],
+        code=code,
+        url="/delete1"
+    )
+
+
+@mng.route("/delete1", methods=['post'])
+def delete1():
+    code = request.form['clientcode']
+
+    dbcon, cur = my_open(**dsn)
+    sql = f"""
+        update client
+        set
+        delflag = 1        
+        where clientcode = '{code}'
+        ;
+    """
+    my_query(sql, cur)
+    dbcon.commit()
+    my_close(dbcon, cur)
+
+    return render_template(
+        "manage_msg.html",
+        title=f"{code}削除完了",
+        message=f"削除が完了しました．"
+    )
+
+
+@mng.route("/no_record")
+def no_record():
+    dbcon, cur = my_open(**dsn)
+
+    sql = f"""
         SELECT *
         FROM kansatu
         left outer JOIN client
         on kansatu.clientcode = client.clientcode
         ;
     """
-    my_query(sqlstring, cur)
+    my_query(sql, cur)
     recset = pd.DataFrame(cur.fetchall())
     my_close(dbcon, cur)
     li = list()
@@ -206,72 +321,89 @@ def kirokunasi():
     li = pd.DataFrame(li, columns=['clientcode'])
     print(li)
 
-    return render_template("table.html",
-                           title="3日以上連続記録なし",
-                           table_data=li
-                           )
+    return render_template(
+        "table.html",
+        title="3日以上連続記録なし",
+        table_data=li
+    )
 
 
-@mng.route("/kaityou")
-def kaityou():
-
+@mng.route("/health")
+def health():
+    today = date.today()
+    week = []
+    for day in range(7,-1,-1):
+        week.append(today-timedelta(days=day))
     dbcon, cur = my_open(**dsn)
 
-    sqlstring = f"""
+    sql = f"""
         SELECT *
         FROM kansatu
         left outer JOIN client
         on kansatu.clientcode = client.clientcode
         ;
     """
-    my_query(sqlstring, cur)
+    my_query(sql, cur)
     recset = pd.DataFrame(cur.fetchall())
-    my_close(dbcon, cur)
 
     li = list()
     for item in recset.values:
         flag = 0
         for ck in item:
-            if type(ck) == int:
+            if ck == 1 or ck == 0:
                 flag += ck
-        if item[4] > 37.5 or flag:
-            li.append(item[1])
+        if (item[4] >= 37.5) or (flag >= 5):
+            sql =f"""
+                select *
+                from client
+                where clientcode = '{item[1]}'
+                ;
+            """
+            my_query(sql, cur)
+            df = pd.DataFrame(cur.fetchall())
+            li.append([item[1], df['namae'][0]])
+    column_list = ["CODE", "氏名"]
 
-    li = pd.DataFrame(li, columns=['clientcode'])
+    li = pd.DataFrame(li, columns=column_list)
 
-    return render_template("table.html",
-                           title="37.5度以上or5個チェックの人",
-                           table_data=li
-                           )
+    my_close(dbcon, cur)
+    return render_template(
+        "manage_table.html",
+        title="37.5度以上or5個チェックの人",
+        week = week,
+        column_list=column_list,
+        table_data=li
+    )
 
 
-@mng.route("/korona")
-def korona():
+@mng.route("/corona")
+def corona():
 
     dbcon, cur = my_open(**dsn)
 
-    sqlstring = f"""
+    sql = f"""
         SELECT client.clientcode,faculty,namae,phone,email,onset,stopflag,corona.lastupdate,corona.delflag
         FROM corona
         INNER JOIN client
         ON corona.clientcode = client.clientcode
         WHERE judge = 'True'
     """
-    my_query(sqlstring, cur)
+    my_query(sql, cur)
     recset = pd.DataFrame(cur.fetchall())
 
-    return render_template("table.html",
-                           title="コロナ感染者",
-                           table_data=recset
-                           )
+    return render_template(
+        "manage_table.html",
+        title="コロナ感染者",
+        table_data=recset
+    )
 
 
-@mng.route("/noukousessyoku")
-def noukousessyoku():
+@mng.route("/close_contact")
+def close_contact():
 
     dbcon, cur = my_open(**dsn)
 
-    sqlstring = f"""
+    sql = f"""
         SELECT client.clientcode,faculty,namae,phone,email,onset,stopflag,corona.lastupdate,corona.delflag
         FROM corona
         INNER JOIN client
@@ -279,10 +411,11 @@ def noukousessyoku():
         WHERE judge = 'False'
         ;
     """
-    my_query(sqlstring, cur)
+    my_query(sql, cur)
     recset = pd.DataFrame(cur.fetchall())
 
-    return render_template("table.html",
-                           title="濃厚接触者",
-                           table_data=recset
-                           )
+    return render_template(
+        "manage_table.html",
+        title="濃厚接触者",
+        table_data=recset
+    )

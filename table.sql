@@ -1,7 +1,6 @@
 CREATE DATABASE if NOT EXISTS dbron;
 USE dbron;
 
-DROP TABLE if EXISTS pickup;
 DROP TABLE if EXISTS koudou_friend;
 DROP TABLE if EXISTS koudou_shosai;
 DROP TABLE if EXISTS kansatu;
@@ -104,6 +103,8 @@ CREATE TABLE koudou_friend(
 	friendID INT NOT NULL AUTO_INCREMENT,
 	shosaiID INT,
 	friendcode VARCHAR(10),
+	lastupdate DATETIME DEFAULT NOW(),
+	delflag BOOL DEFAULT FALSE,
 	PRIMARY KEY(friendID),
 	FOREIGN KEY(shosaiID)
 		REFERENCES koudou_shosai(shosaiID)
@@ -125,25 +126,3 @@ CREATE TABLE corona(
 		ON UPDATE CASCADE
 		ON DELETE CASCADE
 );
-
-CREATE TABLE pickup(
-	pickupID INT NOT NULL AUTO_INCREMENT,
-	clientcode VARCHAR(10),
-	pickupflag INT,
-	lastupdate DATETIME DEFAULT NOW(),
-	delflag BOOL DEFAULT FALSE,
-	PRIMARY KEY (pickupID),
-	FOREIGN KEY(clientcode)
-		REFERENCES client(clientcode)
-		ON UPDATE CASCADE
-		ON DELETE CASCADE
-);
-
-DESC client;
-DESC school;
-DESC kansatu;
-DESC koudou;
-DESC koudou_shosai;
-DESC koudou_friend;
-DESC corona;
-DESC pickup;

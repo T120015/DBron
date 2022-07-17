@@ -11,13 +11,20 @@ dsn = {
     'database': 'dbron'
 }
 
+fns = [
+    #"./school.csv",
+    #"./client.csv", "./client2.csv",
+    "./kansatu.csv", "./kansatu2.csv",
+    "./koudou.csv", "./koudou2.csv"
+]
 
-def csv2df(fn):
+
+def csv2df(tableName: str):
     dbcon, cur = my_open(**dsn)
     dt_now = dt.now()
     with open(fn, "r", encoding="utf-8-sig") as csv_open:
-        csv_file = csv.reader(csv_open)
-        for cnt, item in enumerate(csv_file):
+        csvfile = csv.reader(csv_open)
+        for cnt, item in enumerate(csvfile):
             if cnt == 0:
                 head = item
 
@@ -27,7 +34,6 @@ def csv2df(fn):
     into += "lastupdate"
 
     df = pd.read_csv(fn, header=0)
-    #print(df)
     for ind, datas in df.iterrows():
         data = ""
         for item in datas:
@@ -37,7 +43,7 @@ def csv2df(fn):
                 data += f"'{item}',"
         data += f"'{dt_now}'"
         sql = f"""
-            INSERT INTO client
+            INSERT INTO {tableName}
             ({into})
             values
             ({data})
@@ -50,4 +56,9 @@ def csv2df(fn):
     my_close(dbcon, cur)
 
 
-
+for i, fn in enumerate(fns):
+    
+    if i < 2:
+        csv2df("kansatu")
+    else:
+        csv2df("koudou")

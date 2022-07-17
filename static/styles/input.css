@@ -21,8 +21,13 @@ input {
 }
 
 input.btn{
+    width: 100%;
+    text-align: center;
+}
+
+.setBtn{
+    display: flex;
     width: 10%;
-    text-align: center
 }
 
 .gender {

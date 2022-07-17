@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from MyDatabase import my_open, my_query, my_close
-from datetime import datetime
+from datetime import datetime, date
 import pandas as pd
 
 rec = Blueprint('rec', __name__)
@@ -15,16 +15,18 @@ dsn = {
 
 @rec.route("/kenkou")
 def kenkou():
+    print(date.today())
     return render_template(
         "form_kenkou.html",
-        title="健康記録"
+        title="健康記録",
+        today = date.today()
     )
 
 
 @rec.route("/kenkou1", methods=["POST"])
 def kenkou1():
 
-    clientcode = request.form["clientcode"]
+    code = session["id"]
     record = request.form["record"]
     meridiem = request.form["meridiem"]
     temp = request.form["temp"]
@@ -49,7 +51,7 @@ def kenkou1():
         throat,breathness,cough,nausea,diarrhea,
         taste,olfactory,lastupdate)
         VALUES
-        ('{clientcode}','{record}','{meridiem}','{temp}','{pain}','{feeling}','{headache}',
+        ('{code}','{record}','{meridiem}','{temp}','{pain}','{feeling}','{headache}',
         '{throat}','{breathness}','{cough}','{nausea}','{diarrhea}',
         '{taste}','{olfactory}','{dt_now}')
         ;

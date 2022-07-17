@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content=ce-width, initial-scale=1.0">
+    <meta name="viewport" content=ce-width, initial-scale=1.0>
     <title>{{title}}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='styles/input.css')}}">
     <script src="{{url_for('static', filename='scripts/input.js')}}"></script>
@@ -16,13 +16,19 @@
 </head>
 <body>
     <h1>{{title}}</h1>
-    <form action="/manage/{{to_url}}" method="post">
+    <form action="/manage{{to_url}}" method="post">
         <table border>
         <tr>
         <th>区分</th>  
         <td><select name="position" id="posi"></select></td>
         <th>部類</th>
         <td><select name="class" id="cls"></select></td>
+        </tr>
+        <tr>
+            <th>CODE</th>
+            <td><input type="text" name="clientcode" value="{{code}}"></td>
+            <th>PASS</th>
+            <td><input type="text" name="pass" value="{{pass}}"></td>
         </tr>
         <tr>
             <th>氏名</th>
@@ -55,8 +61,18 @@
             <td><input type="text" name="faculty" value="{{faculty}}"></td>
         </tr>
         </table>
+        <div class=setBtn>
+        {% if url == "/select1" %}
+        <input type="submit" class="btn" value="編集">
+        </form>
+        <form action="/manage{{url}}" method="post">
+        <input type="hidden" name="clientcode" value={{code}}>
+        <input type="submit" class="btn" value="戻る">
+        {% else %}
         <input type="submit" class="btn" value="追加">
-        <a href="/manage{{url}}"><input type="button" class="btn" value="戻る"></a>
-    </form>
+        <a href="/manage"><input type="button" class="btn" value="戻る"></a>
+        {% endif %}
+        </form>     
+        </div>
 </body>
 </html>

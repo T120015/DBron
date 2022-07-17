@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='styles/table.css')}}">
+</head>
+<body>
+<h1>{{title}}</h1>
+<table border>
+    <!--健康状態を確認する時に実行-->
+    {% if url_for(request.endpoint) == "/manage/health" %}
+    <tr>
+        {% for day in week %}
+            <th colspan=2>{{day}}</th>
+        {% endfor %}
+    </tr>
+    {% endif %}
+    <!--ヘッダ情報とレコードを表示-->
+        <tr>
+        <!--ヘッダ-->
+        {% for i in week %}
+            {% for column in column_list %}
+                {% if column in ("区分", "部類", "年齢", "性別") %}
+                <th class="school">{{column}}</th>
+                {% else %}
+                <th>{{column}}</th>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        </tr>
+        <!--レコード-->
+        {% for row_data in table_data.values %}
+            <tr>
+            {% for item in row_data %}
+            <td>{{item}}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    
+</table>
+管理者メニューに<a href="/manage">戻る</a>
+</body>
+</html>

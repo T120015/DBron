@@ -14,12 +14,12 @@
 </head>
 <body>
     <h2>{{title}}</h2>
-    <form action="/shosai" method="post" id = "frm">
-        間柄<input type="text" name="who" placeholder = "例：友人"><br>
-        人数<input type="num" name="people_num" placeholder = "同行者の人数" id = "people_num" oninput = "func1()" required>
-        内同大学<input type="num" name="num" placeholder = "同行者のうち同大学の者の人数" id = "num" oninput = "func1()"><br>
+    <form action="{{to_url}}" method="post" id = "frm">
+        間柄<input type="text" name="who" value = '{{who}}' placeholder = "例：友人"><br>
+        人数<input type="num" name="people_num" value = '{{people_num}}' placeholder = "同行者の人数" id = "people_num" oninput = "func1()" required>
+        内同大学<input type="num" name="num" value = '{{num}}' placeholder = "同行者のうち同大学の者の人数" id = "num" oninput = "func1()"><br>
         <div id = "text"></div>
-        備考<input type="text" name="remarks" placeholder = "例：お互いマスクせず">
+        備考<input type="text" name="remarks" value = '{{remarks}}' placeholder = "例：お互いマスクせず">
         <br><input type="submit" value="提出" id = "submit">
         <input type="reset" value="リセット">
     </form>

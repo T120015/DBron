@@ -12,22 +12,17 @@ dsn = {
 }
 
 
-def csv2df(fn):
+def csv2df(fd):
+    print(type(fd))
     dbcon, cur = my_open(**dsn)
     dt_now = dt.now()
-    with open(fn, "r", encoding="utf-8-sig") as csv_open:
-        csv_file = csv.reader(csv_open)
-        for cnt, item in enumerate(csv_file):
-            if cnt == 0:
-                head = item
-
+    
+    df = pd.read_csv(fd, header=0)
     into = ""
-    for item in head:
+    for item in df.columns:
         into += f"{item},"
     into += "lastupdate"
-
-    df = pd.read_csv(fn, header=0)
-    #print(df)
+    
     for ind, datas in df.iterrows():
         data = ""
         for item in datas:
@@ -46,5 +41,5 @@ def csv2df(fn):
 
     dbcon.commit()
     my_close(dbcon, cur)
-    return f"{fn.filename}から{len(df)}レコードを新規挿入しました"
+    return f"{fd.filename}から{len(df)}レコードを新規挿入しました"
 

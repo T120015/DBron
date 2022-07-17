@@ -13,31 +13,28 @@ dsn = {
 
 cnt = Blueprint('cnt', __name__)
 
+
 @cnt.route("/")
 def top():
     # トップページ
-    title = "メインメニュー"
-    print(session['school'])
-
     return render_template(
-        "top.html", title=title, msg="main src", school=session["school"]
+        "top.html", title="メインメニュー", msg="main src", school=session["school"]
     )
-
-
 
 
 @cnt.route("/coronakansenn")
 def kannsenn():
     return render_template(
         "coronakansenn.html",
-        title = "コロナ感染した人用"
+        title="コロナ感染した人用"
     )
+
 
 @cnt.route("/coronakansenn1", methods=["POST"])
 def kannsenn1():
     clientcode = request.form["clientcode"]
     coronakansennbi = request.form["coronakansennbi"]
-    kansenn=request.form["kansenn"]
+    kansenn = request.form["kansenn"]
     dt_now = datetime.now
 
     dbcon, cur = my_open(**dsn)
@@ -57,4 +54,3 @@ def kannsenn1():
         title="コロナ感染者or濃厚接触者",
         message="を保存しました"
     )
-

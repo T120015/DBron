@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content=ce-width, initial-scale=1.0">
+    <meta name="viewport" content=ce-width, initial-scale="1.0">
     <title>{{title}}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='styles/input.css')}}">
 </head>
 <body>
     <h1>{{title}}</h1>
-    <form action="/manage/{{to_url}}" method="post">
         <table border>
         <tr>
         <th>区分</th>  
@@ -42,8 +41,18 @@
             <td>{{faculty}}</td>
         </tr>
         </table>
-        <input type="submit" class="btn" value="追加">
-        <a href="/manage{{url}}"><input type="button" class="btn" value="戻る"></a>
+    <div class="setBtn">
+    {% if url != "/delete1" %}
+    <form action="/manage/update" method="post">
+        <input type="hidden" name="clientcode" value="{{code}}">
+        <input type="submit" class="btn" value="編集">
     </form>
+    {% endif %}
+    <form action="/manage{{url}}" method="post">
+        <input type="hidden" name="clientcode" value="{{code}}">
+        <input type="submit" class="btn" value="削除">
+    </form>
+        <a href="/manage/select"><input type="button" class="btn" value="戻る"></a>
+    </div>
 </body>
 </html>
