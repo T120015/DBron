@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/input.css')}}">
+    <script src="{{url_for('static', filename='scripts/input.js')}}"></script>
+    <script type="text/javascript">
+        let posi_list = {{input_position | tojson}};
+        let cls_list = {{input_class | tojson}};
+    </script>
+</head>
+<body>
+    <h1>{{title}}</h1>
+    <form action="" method="post">
+    <dl class="school">
+    <dd>区分</dd>  
+    <dt><select name="position" id="posi"></select></dt>
+    <dd>部類</dd>
+    <dt><select name="class" id="cls"></select></dt>
+    </dl>
+    <dl>
+        <dd>氏名</dd>
+        <dt><input type="text"></dt>
+        
+    </dl>
+    </form>
+    
+</body>
+</html>

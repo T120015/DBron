@@ -5,10 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{url_for('static',filename='styles/style.css')}}">
 </head>
 <body>
 <h2>{{title}}</h2>
-{{msg}}
+<ul>
+    <li><a href="/kenkou">健康記録</a></li>
+    <li><a href="/koudou">行動記録</a></li>
+</ul><br>
+{% if not school < 7 %}
+    管理者メニューに<a href="/manage">移動</a><br>
+{% endif %}
+<a href="/logout">Logout</a>
 </body>
 </html>

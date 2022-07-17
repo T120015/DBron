@@ -1,4 +1,7 @@
 @charset "utf-8";
+.acount{
+    display: flex;
+}
 
 #loginbox {
     margin-top: 10px;
