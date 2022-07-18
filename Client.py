@@ -36,20 +36,20 @@ def infect1():
     code = session["id"]
     onset = request.form["onset"]
     infect = request.form["infect"]
-    if infect == 1:
+    if int(infect) == 1:
         hospital = request.form["hospital"]
     else:
         hospital = None
 
-    dt_now = datetime.now()
-
+    print(hospital)
+    
     dbcon, cur = my_open(**dsn)
 
     sql = f"""
         INSERT INTO corona
-        (clientcode,judge, hospital, onset, stopflag)
+        (clientcode,judge, hospital, onset)
         VALUES
-        ('{code}',{infect},'{hospital}','{onset}','{infect}')
+        ('{code}',{infect},'{hospital}','{onset}')
         ;
     """
     my_query(sql, cur)
@@ -58,5 +58,5 @@ def infect1():
     return render_template(
         "msg.html",
         title="コロナ感染者or濃厚接触者",
-        message="記録を保存しました"
+        message="感染記録を保存しました"
     )

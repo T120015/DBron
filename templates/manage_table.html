@@ -5,10 +5,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{title}}</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='styles/manage.css')}}">
         <link rel="stylesheet" href="{{url_for('static',filename='styles/manage_table.css')}}">
     </head>
     <body>
-        <h1>{{title}}</h1>
+        <h2>{{title}}</h2>
         <!--健康状態を確認する時に実行-->        
         <div id="health">
             {% for day in week %}

@@ -17,7 +17,7 @@ dsn = {
 
 @mng.before_request
 def checkManager():
-    #管理者権限の有無
+    # 管理者権限の有無
     if session["school"] < 7:
         return render_template(
             "msg.html",
@@ -45,12 +45,12 @@ def table():
         where delflag = 0
         ;
     """
-    #カラムリスト
+    # カラムリスト
     column_list = ['CODE', '区分', '部類', 'PASSWORD', '氏名',
                    '年齢', '性別', '電話番号', 'メール', '所属部所', '最終更新日']
-    #クエリ実行
+    # クエリ実行
     my_query(sql, cur)
-    #DataFlameに格納
+    # DataFlameに格納
     recset = pd.DataFrame(cur.fetchall())
 
     return render_template(
@@ -66,8 +66,8 @@ def table():
 def insert():
     # 関係者追加
     dbcon, cur = my_open(**dsn)
-    
-    #区分，部類を取得
+
+    # 区分，部類を取得
     sql = f"""
         select distinct position
         from school
@@ -113,7 +113,7 @@ def insert1():
     faculty = request.form['faculty']
 
     dbcon, cur = my_open(**dsn)
-    #区分，部類を取得
+    # 区分，部類を取得
     sql = f"""
         select *
         from school
@@ -122,7 +122,7 @@ def insert1():
     """
     my_query(sql, cur)
     df = pd.DataFrame(cur.fetchall())
-    #レコードを追加
+    # レコードを追加
     sql = f"""
         insert into client
         (schoolID, clientcode, pass, namae, age, gender, phone, email, faculty)
@@ -185,22 +185,29 @@ def select1():
     """
     my_query(sql, cur)
     recset = pd.DataFrame(cur.fetchall())
-    print(recset["namae"])
-    return render_template(
-        "manage_show.html",
-        title=f"{code}の情報",
-        name=recset["namae"][0],
-        gender=recset["gender"][0],
-        age=recset["age"][0],
-        pswd = recset["pass"][0],
-        phone=recset["phone"][0],
-        email=recset["email"][0],
-        faculty=recset["faculty"][0],
-        position=recset["position"][0],
-        cls=recset["class"][0],
-        code=code,
-        url="/delete"
-    )
+    print(recset.empty)
+    if recset.empty:
+        return render_template(
+            "manage_select.html",
+            title="関係者情報",
+            msg=f"関係者コード:{code}は存在しません．"
+        )
+    else:
+        return render_template(
+            "manage_show.html",
+            title=f"{code}の情報",
+            name=recset["namae"][0],
+            gender=recset["gender"][0],
+            age=recset["age"][0],
+            pswd=recset["pass"][0],
+            phone=recset["phone"][0],
+            email=recset["email"][0],
+            faculty=recset["faculty"][0],
+            position=recset["position"][0],
+            cls=recset["class"][0],
+            code=code,
+            url="/delete"
+        )
 
 
 @mng.route("/update", methods=['post'])
@@ -256,7 +263,7 @@ def update():
 
 @mng.route("/delete", methods=['post'])
 def delete():
-    #レコード削除
+    # レコード削除
     code = request.form['clientcode']
     dbcon, cur = my_open(**dsn)
 
@@ -310,7 +317,7 @@ def delete1():
 
 @mng.route("/no_record")
 def no_record():
-    #3日以上連続して記録がない
+    # 3日以上連続して記録がない
     dbcon, cur = my_open(**dsn)
 
     sql = f"""
@@ -321,24 +328,24 @@ def no_record():
         ;
     """
     my_query(sql, cur)
-    #レコードを取得
+    # レコードを取得
     recset = pd.DataFrame(cur.fetchall())
     li = list()
     delta = timedelta(days=3)
 
     for item in recset.values:
-        #3日以上かどうか
+        # 3日以上かどうか
         if item[2] == None:
-            #記録なし
+            # 記録なし
             li.append([item[1], item[20]])
         else:
-            #記録あり
+            # 記録あり
             debug = date.today() - item[2]
             if debug > delta:
                 li.append(item[1])
 
     li = pd.DataFrame(li, columns=['clientcode'])
-    #print(li)
+    # print(li)
 
     my_close(dbcon, cur)
 
@@ -353,13 +360,13 @@ def no_record():
 def health():
     today = date.today()
     week = []
-    for day in range(7,-1,-1):
+    for day in range(7, -1, -1):
         week.append(today-timedelta(days=day))
     dbcon, cur = my_open(**dsn)
     column_list = ["CODE", "氏名"]
-    table=[]
+    table = []
     for day in week:
-        #print(day)
+        # print(day)
         sql = f"""
             SELECT *
             FROM kansatu
@@ -378,7 +385,7 @@ def health():
                 if ck == 1 or ck == 0:
                     flag += ck
             if (item[4] >= 37.5) or (flag >= 5):
-                sql =f"""
+                sql = f"""
                     select *
                     from client
                     where clientcode = '{item[1]}'
@@ -395,7 +402,7 @@ def health():
     return render_template(
         "manage_table.html",
         title="37.5度以上or5個チェックの人",
-        week = week,
+        week=week,
         column_list=column_list,
         table_data=table
     )
@@ -407,7 +414,7 @@ def corona():
     dbcon, cur = my_open(**dsn)
 
     sql = f"""
-        SELECT *
+        SELECT client.clientcode, client.namae, hospital, onset,stopflag
         FROM corona
         inner join client
         on corona.clientcode = client.clientcode
@@ -420,7 +427,7 @@ def corona():
     return render_template(
         "manage_list.html",
         title="コロナ感染者",
-        column_list = column_list,
+        column_list=column_list,
         table_data=recset
     )
 
@@ -430,11 +437,14 @@ def close_contact():
 
     dbcon, cur = my_open(**dsn)
 
+    column_list = ['CODE', '氏名', '診断日', 'ストップフラグ']
     sql = f"""
-        SELECT *
+        SELECT client.clientcode, client.namae, onset,stopflag
         FROM corona
+        inner join client
+        on corona.clientcode = client.clientcode
         WHERE judge = False
-        AND delflag = False
+        AND corona.delflag = False
         ;
     """
     my_query(sql, cur)
@@ -443,5 +453,6 @@ def close_contact():
     return render_template(
         "manage_list.html",
         title="濃厚接触者",
+        column_list = column_list,
         table_data=recset
     )

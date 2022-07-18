@@ -3,10 +3,12 @@
     <head>
         <title>{{title}}</title>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="{{url_for('static', filename='styles/manage.css')}}">
     </head>
     <body>
         <h2>{{title}}</h2>
         <form action="/manage/select1" method="post">
+            <div>{{msg}}</div>
             関係者コードを入れてください<br>
             <input type="text" name="clientcode"><br>
             <input type="submit" value="決定">
