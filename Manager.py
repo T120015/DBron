@@ -1,4 +1,3 @@
-from crypt import methods
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from MyDatabase import my_open, my_query, my_close
 import pandas as pd
@@ -18,6 +17,7 @@ dsn = {
 
 @mng.before_request
 def checkManager():
+    #管理者権限の有無
     if session["school"] < 7:
         return render_template(
             "msg.html",
@@ -51,7 +51,7 @@ def table():
     recset = pd.DataFrame(cur.fetchall())
 
     return render_template(
-        "manage_table.html",
+        "manage_list.html",
         title="関係者一覧",
         column_list=column_list,
         table_data=recset.loc[:, 'clientcode':'lastupdate'].sort_values(
@@ -63,6 +63,8 @@ def table():
 def insert():
     # 関係者追加
     dbcon, cur = my_open(**dsn)
+    
+    #区分，部類を取得
     sql = f"""
         select distinct position
         from school
@@ -108,6 +110,7 @@ def insert1():
     faculty = request.form['faculty']
 
     dbcon, cur = my_open(**dsn)
+    #区分，部類を取得
     sql = f"""
         select *
         from school
@@ -116,6 +119,7 @@ def insert1():
     """
     my_query(sql, cur)
     df = pd.DataFrame(cur.fetchall())
+    #レコードを追加
     sql = f"""
         insert into client
         (schoolID, clientcode, pass, namae, age, gender, phone, email, faculty)
@@ -160,13 +164,13 @@ def select():
     # 関係者編集
     return render_template(
         "manage_select.html",
-        title="関係者情報編集"
+        title="関係者情報"
     )
 
 
 @mng.route("/select1", methods=['post'])
 def select1():
-    code = request.form['clientcode']
+    code = request.form['clientcode'].upper()
     dbcon, cur = my_open(**dsn)
 
     sql = f"""
@@ -181,10 +185,11 @@ def select1():
     print(recset["namae"])
     return render_template(
         "manage_show.html",
-        title=f"{code}の編集",
+        title=f"{code}の情報",
         name=recset["namae"][0],
         gender=recset["gender"][0],
         age=recset["age"][0],
+        pswd = recset["pass"][0],
         phone=recset["phone"][0],
         email=recset["email"][0],
         faculty=recset["faculty"][0],
@@ -197,6 +202,7 @@ def select1():
 
 @mng.route("/update", methods=['post'])
 def update():
+    # レコード編集
     code = request.form['clientcode']
     dbcon, cur = my_open(**dsn)
     sql = f"""
@@ -235,6 +241,7 @@ def update():
         name=recset["namae"][0],
         gender=recset["gender"][0],
         age=recset["age"][0],
+        pswd=recset["pass"][0],
         phone=recset["phone"][0],
         email=recset["email"][0],
         faculty=recset["faculty"][0],
@@ -246,6 +253,7 @@ def update():
 
 @mng.route("/delete", methods=['post'])
 def delete():
+    #レコード削除
     code = request.form['clientcode']
     dbcon, cur = my_open(**dsn)
 
@@ -299,30 +307,40 @@ def delete1():
 
 @mng.route("/no_record")
 def no_record():
+    #3日以上連続して記録がない
     dbcon, cur = my_open(**dsn)
 
     sql = f"""
         SELECT *
         FROM kansatu
-        left outer JOIN client
+        right outer JOIN client
         on kansatu.clientcode = client.clientcode
         ;
     """
     my_query(sql, cur)
+    #レコードを取得
     recset = pd.DataFrame(cur.fetchall())
-    my_close(dbcon, cur)
     li = list()
     delta = timedelta(days=3)
+
     for item in recset.values:
-        debug = date.today() - item[2]
-        if debug > delta:
-            li.append(item[1])
+        #3日以上かどうか
+        if item[2] == None:
+            #記録なし
+            li.append([item[1], item[20]])
+        else:
+            #記録あり
+            debug = date.today() - item[2]
+            if debug > delta:
+                li.append(item[1])
 
     li = pd.DataFrame(li, columns=['clientcode'])
-    print(li)
+    #print(li)
+
+    my_close(dbcon, cur)
 
     return render_template(
-        "table.html",
+        "manage_table.html",
         title="3日以上連続記録なし",
         table_data=li
     )
@@ -335,36 +353,40 @@ def health():
     for day in range(7,-1,-1):
         week.append(today-timedelta(days=day))
     dbcon, cur = my_open(**dsn)
-
-    sql = f"""
-        SELECT *
-        FROM kansatu
-        left outer JOIN client
-        on kansatu.clientcode = client.clientcode
-        ;
-    """
-    my_query(sql, cur)
-    recset = pd.DataFrame(cur.fetchall())
-
-    li = list()
-    for item in recset.values:
-        flag = 0
-        for ck in item:
-            if ck == 1 or ck == 0:
-                flag += ck
-        if (item[4] >= 37.5) or (flag >= 5):
-            sql =f"""
-                select *
-                from client
-                where clientcode = '{item[1]}'
-                ;
-            """
-            my_query(sql, cur)
-            df = pd.DataFrame(cur.fetchall())
-            li.append([item[1], df['namae'][0]])
     column_list = ["CODE", "氏名"]
+    table=[]
+    for day in week:
+        #print(day)
+        sql = f"""
+            SELECT *
+            FROM kansatu
+            left outer JOIN client
+            on kansatu.clientcode = client.clientcode
+            where record = '{day}'
+            ;
+        """
+        my_query(sql, cur)
+        recset = pd.DataFrame(cur.fetchall())
 
-    li = pd.DataFrame(li, columns=column_list)
+        li = list()
+        for item in recset.values:
+            flag = 0
+            for ck in item:
+                if ck == 1 or ck == 0:
+                    flag += ck
+            if (item[4] >= 37.5) or (flag >= 5):
+                sql =f"""
+                    select *
+                    from client
+                    where clientcode = '{item[1]}'
+                    ;
+                """
+                my_query(sql, cur)
+                df = pd.DataFrame(cur.fetchall())
+                li.append([item[1], df['namae'][0]])
+
+        li = pd.DataFrame(li, columns=column_list)
+        table.append(li)
 
     my_close(dbcon, cur)
     return render_template(
@@ -372,28 +394,30 @@ def health():
         title="37.5度以上or5個チェックの人",
         week = week,
         column_list=column_list,
-        table_data=li
+        table_data=table
     )
 
 
 @mng.route("/corona")
 def corona():
-
+    column_list = ['CODE', '氏名', '診断病院', '診断日', 'ストップフラグ']
     dbcon, cur = my_open(**dsn)
 
     sql = f"""
-        SELECT client.clientcode,faculty,namae,phone,email,onset,stopflag,corona.lastupdate,corona.delflag
+        SELECT *
         FROM corona
-        INNER JOIN client
-        ON corona.clientcode = client.clientcode
-        WHERE judge = 'True'
+        inner join client
+        on corona.clientcode = client.clientcode
+        WHERE judge = True
+        AND corona.delflag = False
     """
     my_query(sql, cur)
     recset = pd.DataFrame(cur.fetchall())
 
     return render_template(
-        "manage_table.html",
+        "manage_list.html",
         title="コロナ感染者",
+        column_list = column_list,
         table_data=recset
     )
 
@@ -404,18 +428,17 @@ def close_contact():
     dbcon, cur = my_open(**dsn)
 
     sql = f"""
-        SELECT client.clientcode,faculty,namae,phone,email,onset,stopflag,corona.lastupdate,corona.delflag
+        SELECT *
         FROM corona
-        INNER JOIN client
-        ON corona.clientcode = client.clientcode
-        WHERE judge = 'False'
+        WHERE judge = False
+        AND delflag = False
         ;
     """
     my_query(sql, cur)
     recset = pd.DataFrame(cur.fetchall())
 
     return render_template(
-        "manage_table.html",
+        "manage_list.html",
         title="濃厚接触者",
         table_data=recset
     )

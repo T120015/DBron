@@ -88,10 +88,15 @@ def shosai():
     #form変数を受取
     who = request.form['who']
     people_num = request.form['people_num']
-    num = int(request.form['num'])
+    num = request.form['num']
     remarks = request.form['remarks']
     #sessionからclientcodeを受取
     clientcode = session["id"]
+
+    if num == '':
+        num = 0
+    else:
+        num = int(num)
 
     #データベースをオープン
     dbcon, cur = my_open(**dsn)
@@ -173,7 +178,9 @@ def shosai1():
         #flagをリセット
         flag = 0
         for ind, rowdata in recset.iterrows():
-            if item == rowdata['clientcode']:
+            if clientcode == rowdata['clientcode']:
+                continue
+            elif item == rowdata['clientcode']:
                 #clientcodeが一致したらflagを立てる
                 flag = 1
         #もしflagが立っていなかったとき、clientcodeに誤り有
@@ -183,7 +190,8 @@ def shosai1():
                 "form_friend.html",
                 title="同行者記録ページ",
                 msg="学籍番号に誤りがあります。正しい学籍番号を入力してください。",
-                num=num
+                num=num,
+                friendcode=None
             )
 
     #koudouテーブルからclientcodeが等しいテーブルデータを受取
@@ -205,6 +213,8 @@ def shosai1():
         select *
         from koudou_shosai
         where koudouID = {koudouID}
+        and delflag = False
+        ;
     """
     #クエリを実行
     my_query(sqlstring, cur)
@@ -220,6 +230,7 @@ def shosai1():
             (shosaiID, friendcode, lastupdate)
             values
             ({shosaiID}, '{item}', '{dt_now}')
+            ;
         """
         #クエリを実行
         my_query(sqlstring, cur)
@@ -237,8 +248,8 @@ def shosai1():
     )
 
 
-@kdu.route("/update")
-def update():
+@kdu.route("/update_koudou")
+def update_koudou():
 
     #データベースをオープン
     dbcon, cur = my_open(**dsn)
@@ -257,6 +268,8 @@ def update():
     #テーブルデータをDataFrameに変換
     recset = pd.DataFrame(cur.fetchall())
     recset = recset.loc[:, :'lastupdate']
+
+    print(recset)
 
     sqlstring = f"""
         select shosaiID, friendcode
@@ -296,15 +309,22 @@ def update():
     recset.insert(3, 'start', df['start'])
     recset.insert(4, 'end', df['end'])
 
+    li = ['編集ボタン', '削除ボタン', '行動日', '開始時間', '終了時間', '行き先', '移動方法',
+          '出発地', '目的地', '同行者', '同行者', '人数', '同行者学籍番号', '備考', '最終更新日']
+
     return render_template(
         "table_update.html",
         title="キャンセルレコード選択画面",
-        table_data=recset
+        table_data=recset,
+        list=li,
+        name='koudouID',
+        action_edit='/update1_koudou',
+        action_delete='/delete_koudou'
     )
 
 
-@kdu.route("/update1", methods=['POST'])
-def update1():
+@kdu.route("/update1_koudou", methods=['POST'])
+def update1_koudou():
 
     koudouID = request.form['koudouID']
     session['koudouID'] = koudouID
@@ -344,7 +364,7 @@ def update1():
 
     return render_template(
         "form_koudou.html",
-        to_url='/update2',
+        to_url='/update2_koudou',
         title="行動記録編集",
         action=recset['action'][0],
         start=recset['start'][0],
@@ -357,9 +377,8 @@ def update1():
     )
 
 
-@kdu.route("/update2", methods=['POST'])
-def update2():
-
+@kdu.route("/update2_koudou", methods=['POST'])
+def update2_koudou():
     koudouID = session['koudouID']
     action = request.form['action']
     start = request.form['start']
@@ -399,55 +418,75 @@ def update2():
         where koudouID = {koudouID}
         ;
     """
-
     #クエリを実行
     my_query(sqlstring, cur)
 
     #テーブルデータをDataFrameに変換
     recset = pd.DataFrame(cur.fetchall())
-    shosaiID = int(recset['shosaiID'][0])
-    session['shosaiID'] = shosaiID
-
-    sqlstring = f"""
-        select *
-        from koudou_friend
-        where shosaiID = {shosaiID}
-        and delflag = False
-        ;
-    """
-    #クエリを実行
-    my_query(sqlstring, cur)
-
-    num = pd.DataFrame(cur.fetchall())
-    num = len(num['friendcode'])
-    session['num'] = num
-
-    #データベースをクローズ
-    my_close(dbcon, cur)
-
-    #同行者がTrueの時、form_shosaiに移動
-    if int(companions) == 1:
-        return render_template(
-            "form_shosai.html",
-            to_url='/update3',
-            title="行動詳細編集",
-            who=recset['who'][0],
-            people_num=recset['people_num'][0],
-            num=num,
-            remarks=recset['remarks'][0]
-        )
-    #同行者がFalseの時、入力を終了
+    if recset.empty:
+        session.pop('koudouID', None)
+        if companions == 1:
+            return render_template(
+                "form_shosai.html",
+                to_url='/shosai',
+                title="行動詳細記録ページ"
+            )
+        else:
+            return render_template(
+                "msg.html",
+                title="行動記録編集完了",
+                message="行動記録を編集しました。"
+            )
     else:
-        return render_template(
-            "msg.html",
-            to_url='/shosai',
-            title="行動記録編集完了",
-            message="行動記録を編集しました。"
-        )
+        shosaiID = int(recset['shosaiID'][0])
+        session['shosaiID'] = shosaiID
+
+        sqlstring = f"""
+            select *
+            from koudou_friend
+            where shosaiID = {shosaiID}
+            and delflag = False
+            ;
+        """
+        #クエリを実行
+        my_query(sqlstring, cur)
+
+        num = pd.DataFrame(cur.fetchall())
+        if num.empty:
+            num = 0
+        else:
+            num = len(num['friendcode'])
+
+        session['num'] = num
+
+        #データベースをクローズ
+        my_close(dbcon, cur)
+
+        #同行者がTrueの時、form_shosaiに移動
+        if int(companions) == 1:
+            return render_template(
+                "form_shosai.html",
+                to_url='/update3_koudou',
+                title="行動詳細編集",
+                who=recset['who'][0],
+                people_num=recset['people_num'][0],
+                num=num,
+                remarks=recset['remarks'][0]
+            )
+        #同行者がFalseの時、入力を終了
+        else:
+            session.pop('num', None)
+            session.pop('koudouID', None)
+            session.pop('shosaiID', None)
+            return render_template(
+                "msg.html",
+                title="行動記録編集完了",
+                message="行動記録を編集しました。"
+            )
 
 
-@kdu.route("/update3", methods=['POST'])
-def update3():
+@kdu.route("/update3_koudou", methods=['POST'])
+def update3_koudou():
     #現在時刻を取得
     dt_now = datetime.now()
 
@@ -489,14 +528,15 @@ def update3():
 
     #テーブルデータをDataFrameに変換
     recset = pd.DataFrame(cur.fetchall())
-    #データベースをクローズ
-    my_close(dbcon, cur)
+    if recset.empty:
+        recset = None
+    print(recset)
 
     #同大学の同行者が1人以上の時、form_friendに移動
     if num >= 1:
         return render_template(
             "form_friend.html",
-            to_url='/update4',
+            to_url='/update4_koudou',
             title="同行者記録ページ",
             msg="同行者を入力してください",
             num=num,
@@ -504,15 +544,27 @@ def update3():
         )
     #同大学の同行者がいない時、入力を終了
     else:
+        sqlstring = f"""
+            update koudou_friend
+            set
+            delflag = True
+            where shosaiID = {shosaiID}
+        """
+        my_query(sqlstring, cur)
+        dbcon.commit()
+        my_close(dbcon, cur)
+        session.pop('num', None)
+        session.pop('koudouID', None)
+        session.pop('shosaiID', None)
         return render_template(
             "msg.html",
-            title="行動記録完了",
-            message="行動記録を保存しました。"
+            title="行動記録更新",
+            message="行動記録を更新しました。"
         )
 
 
-@kdu.route("/update4", methods=['POST'])
-def update4():
+@kdu.route("/update4_koudou", methods=['POST'])
+def update4_koudou():
     #データベースをオープン
     dbcon, cur = my_open(**dsn)
 
@@ -520,8 +572,7 @@ def update4():
     dt_now = datetime.now()
     #form変数を受取
     num = int(request.form['num'])
-    #sessionからclientcodeを受取
-    clientcode = session["id"]
+    clientcode = session['id']
     #sessionから更新前のnumを受取
     num_old = session["num"]
     #sessionからshosaiIDを受取
@@ -546,18 +597,20 @@ def update4():
         #flagをリセット
         flag = 0
         for ind, rowdata in recset.iterrows():
-            if item != rowdata['clientcode'] or clientcode == rowdata['clientcode']:
+            if clientcode == rowdata['clientcode']:
+                continue
+            elif item == rowdata['clientcode']:
                 #clientcodeが一致したらflagを立てる
                 flag = 1
-        #もしflagが立っていたとき、clientcodeに誤り有
+        #もしflagが立っていなかったとき、clientcodeに誤り有
         #form_friendで入力しなおし
         if flag == 0:
             return render_template(
                 "form_friend.html",
-                to_url='/update4',
                 title="同行者記録ページ",
                 msg="学籍番号に誤りがあります。正しい学籍番号を入力してください。",
-                num=num
+                num=num,
+                friendcode=None
             )
 
     sqlstring = f"""
@@ -570,7 +623,6 @@ def update4():
     my_query(sqlstring, cur)
 
     recset = pd.DataFrame(cur.fetchall())
-    print(recset)
     count = 0
     #koudou_friendテーブルにデータを挿入
     if num_old > num:
@@ -584,7 +636,6 @@ def update4():
                 where friendID = {recset['friendID'][count]}
                 ;
             """
-            print(f"friendID is {recset['friendID'][count]}")
             count += 1
             #クエリを実行
             my_query(sqlstring, cur)
@@ -609,7 +660,6 @@ def update4():
                     where friendID = {recset['friendID'][count]}
                     ;
                 """
-                print(recset['friendID'][count])
             count += 1
             #クエリを実行
             my_query(sqlstring, cur)
@@ -626,17 +676,52 @@ def update4():
             """
             my_query(sqlstring, cur)
             count += 1
-    else:
-        print("inagaki")
 
     #テーブルに変更を適用
     dbcon.commit()
     #データベースをクローズ
     my_close(dbcon, cur)
 
+    session.pop('num', None)
+    session.pop('koudouID', None)
+    session.pop('shosaiID', None)
+
     #実行終了
     return render_template(
         "msg.html",
-        title="行動記録完了",
-        message="行動記録を保存しました。"
+        title="行動記録更新",
+        message="行動記録を更新しました。"
+    )
+
+
+@kdu.route("/delete_koudou", methods=['POST'])
+def delete_koudou():
+    #データベースをオープン
+    dbcon, cur = my_open(**dsn)
+
+    #現在時刻を取得
+    dt_now = datetime.now()
+
+    #form変数を受取
+    koudouID = request.form['koudouID']
+
+    sqlstring = f"""
+        update koudou
+        set
+        lastupdate = '{dt_now}',
+        delflag = True
+        where koudouID = {koudouID}
+        ;
+    """
+    my_query(sqlstring, cur)
+
+    #テーブルに変更を適用
+    dbcon.commit()
+    #データベースをクローズ
+    my_close(dbcon, cur)
+    #実行終了
+    return render_template(
+        "msg.html",
+        title="行動記録削除",
+        message="行動記録を削除しました。"
     )

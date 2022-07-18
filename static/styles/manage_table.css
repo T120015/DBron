@@ -1,0 +1,29 @@
+.school{
+    width: 50px;
+}
+
+#health{
+    display: flex;
+}
+
+table {
+    width: 150px;
+    flex-shrink: 0;
+}
+
+th {
+    height: 28px;
+    width: 136px;
+}
+
+.code{
+    width: 50px;
+}
+
+.name{
+    width: 80px;
+}
+
+tr {
+    display: table;
+}

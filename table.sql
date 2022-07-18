@@ -116,6 +116,7 @@ CREATE TABLE corona(
 	coronaID INT NOT NULL AUTO_INCREMENT,
 	clientcode VARCHAR(10),
 	judge BOOL,
+	hospital VARCHAR(20),
 	onset DATE,
 	stopflag BOOL,
 	lastupdate DATETIME DEFAULT NOW(),

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
+    <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content=ce-width, initial-scale=1.0>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='styles/input.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/manage_input.css')}}">
     <script src="{{url_for('static', filename='scripts/input.js')}}"></script>
     <script type="text/javascript">
         let posi_list = {{input_position | tojson}};
@@ -28,7 +28,7 @@
             <th>CODE</th>
             <td><input type="text" name="clientcode" value="{{code}}"></td>
             <th>PASS</th>
-            <td><input type="text" name="pass" value="{{pass}}"></td>
+            <td><input type="text" name="pass" value="{{pswd}}"></td>
         </tr>
         <tr>
             <th>氏名</th>
@@ -46,7 +46,7 @@
             {% endif %}
             </td>
             <th>年齢</th>
-            <td><input type="number" min=0 class="stext" name="age" value={{age}}></td>
+            <td><input type="number" min="0" class="stext" name="age" value="{{age}}"></td>
         </tr>
         <tr>
             <th>電話番号</th>
@@ -61,18 +61,19 @@
             <td><input type="text" name="faculty" value="{{faculty}}"></td>
         </tr>
         </table>
-        <div class=setBtn>
+        <div class="setBtn">
         {% if url == "/select1" %}
         <input type="submit" class="btn" value="編集">
         </form>
         <form action="/manage{{url}}" method="post">
-        <input type="hidden" name="clientcode" value={{code}}>
+        <input type="hidden" name="clientcode" value="{{code}}">
         <input type="submit" class="btn" value="戻る">
         {% else %}
         <input type="submit" class="btn" value="追加">
         <a href="/manage"><input type="button" class="btn" value="戻る"></a>
         {% endif %}
-        </form>     
+        </form> 
+
         </div>
 </body>
 </html>

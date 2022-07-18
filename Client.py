@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from MyDatabase import my_open, my_query, my_close
-from datetime import datetime
+from datetime import date, datetime
 import pandas as pd
 
 dsn = {
@@ -22,35 +22,41 @@ def top():
     )
 
 
-@cnt.route("/coronakansenn")
-def kannsenn():
+@cnt.route("/infect_corona")
+def infect():
     return render_template(
-        "coronakansenn.html",
-        title="コロナ感染した人用"
+        "form_infect.html",
+        title="コロナ感染記録",
+        today=date.today()
     )
 
 
-@cnt.route("/coronakansenn1", methods=["POST"])
-def kannsenn1():
-    clientcode = request.form["clientcode"]
-    coronakansennbi = request.form["coronakansennbi"]
-    kansenn = request.form["kansenn"]
-    dt_now = datetime.now
+@cnt.route("/infect_corona1", methods=["POST"])
+def infect1():
+    code = session["id"]
+    onset = request.form["onset"]
+    infect = request.form["infect"]
+    if infect == 1:
+        hospital = request.form["hospital"]
+    else:
+        hospital = None
+
+    dt_now = datetime.now()
 
     dbcon, cur = my_open(**dsn)
 
-    sqlstring = f"""
+    sql = f"""
         INSERT INTO corona
-        (clientcode,judge,onset,lastupdate)
+        (clientcode,judge, hospital, onset, stopflag)
         VALUES
-        ('{clientcode}','{kansenn}','{coronakansennbi}','{dt_now}')
+        ('{code}',{infect},'{hospital}','{onset}','{infect}')
         ;
     """
-    my_query(sqlstring, cur)
+    my_query(sql, cur)
     dbcon.commit()
     my_close(dbcon, cur)
     return render_template(
         "msg.html",
         title="コロナ感染者or濃厚接触者",
-        message="を保存しました"
+        message="記録を保存しました"
     )

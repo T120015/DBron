@@ -1,0 +1,35 @@
+tr {
+    display: table;
+    width: 305px;
+}
+
+th {
+    width: 65px;
+}
+
+.stext{
+    width: 60px;
+}
+
+select {
+    width: 75px;
+}
+
+input {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+input.btn{
+    width: 100%;
+    text-align: center;
+}
+
+.setBtn{
+    display: flex;
+    width: 10%;
+}
+
+.gender {
+    width: min-content;
+}

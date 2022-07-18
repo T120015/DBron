@@ -48,7 +48,7 @@ def login(msg=""):
 
 @app.route("/login1", methods=["post"])
 def login1():
-    clientcode = request.form["clientcode"]
+    clientcode = request.form["clientcode"].upper()
     password = request.form["pass"]
     # for debug
     # print(clientcode, password)
@@ -60,7 +60,7 @@ def login1():
     sql = f"""
         select *
         from client
-        where clientcode = '{clientcode.upper()}'
+        where clientcode = '{clientcode}'
     """
     my_query(sql, cur)
     recset = pd.DataFrame(cur.fetchall())
@@ -73,9 +73,7 @@ def login1():
         return redirect(url_for("login", msg="IDかPassWordが違います."))
     else:
         session["id"] = clientcode
-        session["school"] = recset["schoolID"][0].astype("object")
-        if session["school"] >= 7:
-            session.permanent = True
+        session["school"] = recset["schoolID"][0].astype("object")           
         print(session)
         return redirect(url_for("cnt.top"))
 
@@ -86,6 +84,7 @@ def logout():
     session.pop("id", None)
     session.pop("school", None)
     session.clear()
+    print(session)
     return redirect(url_for("login"))
 
 @app.route("/corona")
