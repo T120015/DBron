@@ -161,7 +161,7 @@ def shosai1():
     #同行者のclientcodeをflientcodeにlist型として格納
     friendcode = []
     for i in range(num):
-        friendcode.append(request.form[f'friendcode{i + 1}'])
+        friendcode.append(request.form[f'friendcode{i + 1}'].upper())
 
     #clienttableからデータを受取
     sqlstring = f"""
@@ -190,6 +190,7 @@ def shosai1():
                 "form_friend.html",
                 title="同行者記録ページ",
                 msg="学籍番号に誤りがあります。正しい学籍番号を入力してください。",
+                to_url='/friend',
                 num=num,
                 friendcode=None
             )

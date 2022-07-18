@@ -3,11 +3,12 @@
     <head>
         <title>{{title}}</title>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="{{url_for('static', filename='styles/style.css')}}">
     </head>
     <body>
         <h2>{{title}}</h2>
         <form action="{{url_for}}" method="POST">
-            <input type="date" name = "record" value="{{record}}"><br>
+            <input type="date" name = "record" value="{{today}}"><br>
             {% if meridiem == 'afternoon' %}
                 <input type="radio" name="meridiem" value="morning">午前
                 <input type="radio" name="meridiem" value="afternoon" checked>午後<br>
@@ -15,7 +16,7 @@
                 <input type="radio" name="meridiem" value="morning" checked>午前
                 <input type="radio" name="meridiem" value="afternoon">午後<br>
             {% endif %}
-            体温<input type="number" step="0.1" min="30" name="temp" value = "{{temp}}" required><br><br>
+            体温<input type="number" step="0.1" min="33" name="temp" value = "{{temp}}" required><br><br>
             体調
             <table>
             <tr>
@@ -142,7 +143,7 @@
             </table>
             <br>
             <input type="submit" value="完了">
-            <input type="reset" value="reset"> 
+            <a href="/"><input type="button" value="戻る"></a>
         </form>
         <pre>{{message}}</pre>
     </body>

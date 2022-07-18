@@ -9,14 +9,14 @@
         {{msg}}
         <form action="{{to_url}}" method="POST">
             同行者学籍番号<br>
-            {% if friendcode is None %}
-            {% for i in range(num) %}
-                {{loop.index}}人目<input type="text" name="friendcode{{loop.index}}"><br>
-            {% endfor %}
+            {% if friendcode is none %}
+                {% for i in range(num) %}
+                    {{loop.index}}人目<input type="text" name="friendcode{{loop.index}}"><br>
+                {% endfor %}
             {% else %}
-            {% for i in range(num) %}
-                {{loop.index}}人目<input type="text" name="friendcode{{loop.index}}" value = "{{friendcode['friendcode'][i]}}"><br>
-            {% endfor %}
+                {% for i in range(num) %}
+                    {{loop.index}}人目<input type="text" name="friendcode{{loop.index}}" value = "{{friendcode['friendcode'][i]}}"><br>
+                {% endfor %}
             {% endif %}
             <input type="hidden" name="num" value={{num}}>
             <input type="submit" value="完了">

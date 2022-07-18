@@ -1,3 +1,14 @@
+@charset "utf-8";
+
+body {
+  background-color: rgb(225, 255, 231);
+  margin: 2%;
+}
+
+table{
+    background-color: white;
+}
+
 tr {
     display: table;
     width: 305px;

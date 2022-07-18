@@ -1,29 +1,37 @@
-.school{
-    width: 50px;
+@charset "utf-8";
+
+body {
+  background-color: rgb(225, 255, 231);
+  margin: 2%;
 }
 
-#health{
-    display: flex;
+.school {
+  width: 50px;
+}
+
+#health {
+  display: flex;
 }
 
 table {
-    width: 150px;
-    flex-shrink: 0;
+  background-color: white;
+  width: 150px;
+  flex-shrink: 0;
 }
 
 th {
-    height: 28px;
-    width: 136px;
+  height: 28px;
+  width: 136px;
 }
 
-.code{
-    width: 50px;
+.code {
+  width: 50px;
 }
 
-.name{
-    width: 80px;
+.name {
+  width: 80px;
 }
 
 tr {
-    display: table;
+  display: table;
 }

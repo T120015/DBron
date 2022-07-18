@@ -15,7 +15,6 @@ dsn = {
 
 @rec.route("/kenkou")
 def kenkou():
-    print(date.today())
     return render_template(
         "form_kenkou.html",
         title="健康記録",

@@ -45,9 +45,12 @@ def table():
         where delflag = 0
         ;
     """
+    #カラムリスト
     column_list = ['CODE', '区分', '部類', 'PASSWORD', '氏名',
                    '年齢', '性別', '電話番号', 'メール', '所属部所', '最終更新日']
+    #クエリ実行
     my_query(sql, cur)
+    #DataFlameに格納
     recset = pd.DataFrame(cur.fetchall())
 
     return render_template(

@@ -19,6 +19,7 @@ app.register_blueprint(cnt)
 app.register_blueprint(kdu)
 app.register_blueprint(rec)
 
+
 @app.before_request
 def checkSession():
     if request.endpoint not in ('login', 'login1', 'logout', 'static'):
@@ -53,10 +54,8 @@ def login1():
     # for debug
     # print(clientcode, password)
 
-    
-
     dbcon, cur = my_open(**dsn)
-    
+
     sql = f"""
         select *
         from client
@@ -73,7 +72,7 @@ def login1():
         return redirect(url_for("login", msg="IDかPassWordが違います."))
     else:
         session["id"] = clientcode
-        session["school"] = recset["schoolID"][0].astype("object")           
+        session["school"] = recset["schoolID"][0].astype("object")
         print(session)
         return redirect(url_for("cnt.top"))
 
@@ -86,6 +85,7 @@ def logout():
     session.clear()
     print(session)
     return redirect(url_for("login"))
+
 
 @app.route("/corona")
 def corona():
