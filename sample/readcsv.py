@@ -15,7 +15,7 @@ fns = [
     #"./school.csv",
     #"./client.csv", "./client2.csv",
     "./kansatu.csv", "./kansatu2.csv",
-    "./koudou.csv", "./koudou2.csv"
+    #"./koudou.csv", "./koudou2.csv"
 ]
 
 

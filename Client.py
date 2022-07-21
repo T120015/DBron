@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from MyDatabase import my_open, my_query, my_close
-from datetime import date, datetime
-import pandas as pd
+from datetime import date
 
 dsn = {
     'host': '172.30.0.10',  # ホスト名(IPアドレス)
@@ -36,7 +35,9 @@ def infect1():
     code = session["id"]
     onset = request.form["onset"]
     infect = request.form["infect"]
+    #感染者 or 接触者の判定
     if int(infect) == 1:
+        #病院の記録を追加
         hospital = request.form["hospital"]
     else:
         hospital = None
@@ -52,11 +53,14 @@ def infect1():
         ('{code}',{infect},'{hospital}','{onset}')
         ;
     """
+    #SQLに書き込み
     my_query(sql, cur)
+    #SQLに反映
     dbcon.commit()
     my_close(dbcon, cur)
+    #メッセージを表示
     return render_template(
         "msg.html",
-        title="コロナ感染者or濃厚接触者",
+        title="コロナ陽性・濃厚接触者記録",
         message="感染記録を保存しました"
     )

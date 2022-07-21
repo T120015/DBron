@@ -64,6 +64,7 @@
         </table>
         <div class="setBtn">
         {% if url == "/select1" %}
+        <input type="hidden" name="old_code" value="{{code}}">
         <input type="submit" class="btn" value="編集">
         </form>
         <form action="/manage{{url}}" method="post">

@@ -7,7 +7,7 @@
     </head>
     <body>
         <h2>{{title}}</h2>
-        <form action="{{url_for}}" method="POST">
+        <form action="{{to_url}}" method="POST">
             <input type="date" name = "record" value="{{today}}"><br>
             {% if meridiem == 'afternoon' %}
                 <input type="radio" name="meridiem" value="morning">午前

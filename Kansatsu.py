@@ -18,7 +18,8 @@ def kenkou():
     return render_template(
         "form_kenkou.html",
         title="健康記録",
-        today = date.today()
+        today = date.today(),
+        to_url = "/kenkou1"
     )
 
 
@@ -74,6 +75,7 @@ def update_kansatu():
         select *
         from kansatu
         where delflag = False
+        and clientcode = '{session['id']}'
         ;
     """
 

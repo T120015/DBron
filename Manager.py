@@ -1,3 +1,5 @@
+from crypt import methods
+from turtle import position
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from MyDatabase import my_open, my_query, my_close
 import pandas as pd
@@ -167,7 +169,8 @@ def select():
     # 関係者編集
     return render_template(
         "manage_select.html",
-        title="関係者情報"
+        title="関係者情報",
+        to_url="/select1"
     )
 
 
@@ -210,6 +213,8 @@ def select1():
         )
 
 
+
+
 @mng.route("/update", methods=['post'])
 def update():
     # レコード編集
@@ -248,6 +253,7 @@ def update():
         input_position=position,
         input_class=cls,
         url="/select1",
+        to_url = "/update1",
         name=recset["namae"][0],
         gender=recset["gender"][0],
         age=recset["age"][0],
@@ -260,6 +266,60 @@ def update():
         code=code
     )
 
+@mng.route("/update1", methods=['post'])
+def update1():
+    old_code = request.form["old_code"]
+    code = request.form["clientcode"]
+    position = request.form["position"]
+    cls = request.form["class"]
+    pswd = request.form["pass"]
+    namae = request.form["namae"]
+    age = request.form["age"]
+    gender = request.form["gender"]
+    phone = request.form["phone"]
+    email = request.form["email"]
+    faculty = request.form["faculty"]
+    
+    dbcon, cur = my_open(**dsn)
+    
+    sql = f"""
+        select schoolID
+        from school
+        where position = '{position}'
+        and class = '{cls}'
+        and delflag = 0
+        ;
+    """
+    my_query(sql, cur)
+    recset = pd.DataFrame(cur.fetchall())
+    school = recset["schoolID"][0]
+    sql = f"""
+        update client
+        set
+        schoolID = {school},
+        clientcode = '{code}',
+
+        pass = '{pswd}',
+        namae = '{namae}',
+        age = {age},
+        gender = '{gender}',
+        phone = '{phone}',
+        email = '{email}',     
+        faculty = '{faculty}',
+        lastupdate = '{datetime.now()}'
+        where clientcode = '{old_code}'
+        and delflag = 0
+        ;
+    """
+    my_query(sql, cur)
+    dbcon.commit()
+    my_close(dbcon, cur)
+
+    return render_template(
+        "manage_msg.html",
+        title = f"{code}編集完了",
+        message = f"編集が完了しました."
+    )
 
 @mng.route("/delete", methods=['post'])
 def delete():
@@ -300,7 +360,8 @@ def delete1():
     sql = f"""
         update client
         set
-        delflag = 1        
+        delflag = 1,
+        lastupdate = '{datetime.now()}'
         where clientcode = '{code}'
         ;
     """
@@ -315,44 +376,174 @@ def delete1():
     )
 
 
+@mng.route("/show_record")
+def show_record():
+    # 関係者編集
+    return render_template(
+        "manage_select.html",
+        title="関係者記録情報",
+        to_url = "/show_record1"
+    )
+
+
+@mng.route("/show_record1", methods=['post'])
+def show_record1():
+    code = request.form['clientcode'].upper()
+    dbcon, cur = my_open(**dsn)
+
+    sql = f"""
+        select *
+        from acount
+        where clientcode = '{code}'
+        and delflag = 0
+        ;
+    """
+    my_query(sql, cur)
+    recset = pd.DataFrame(cur.fetchall())
+    print(recset.empty)
+    if recset.empty:
+        return render_template(
+            "manage_select.html",
+            title="関係者情報",
+            msg=f"関係者コード:{code}は存在しません．"
+        )
+    else:
+        return render_template(
+            "manage_record.html",
+            title=f"{code}の記録情報",
+            code=code
+        )
+
+@mng.route("/show_record2", methods=['post'])
+def show_record2():
+    code = request.form["clientcode"]
+    to_url = request.form["url"]
+
+    return redirect(url_for(f"mng.{to_url}", code=code))
+
+
+@mng.route("/show_koudou/<string:code>")
+def show_koudou(code):
+
+    #データベースをオープン
+    dbcon, cur = my_open(**dsn)
+    #koudouテーブルからclientcodeが等しいテーブルデータを引き出す
+    sqlstring = f"""
+        select distinct koudouID, shosaiID, action, start, end, location, move, departure, arrival, companions, who, people_num, remarks, lastupdate
+        from koudou_all
+        where clientcode = '{code}'
+        and delflag = False
+        ;
+    """
+
+    #クエリを実行
+    my_query(sqlstring, cur)
+
+    #テーブルデータをDataFrameに変換
+    recset = pd.DataFrame(cur.fetchall())
+    recset = recset.loc[:, :'lastupdate']
+
+    print(recset)
+
+    sqlstring = f"""
+        select shosaiID, friendcode
+        from koudou_friend
+        where delflag = False
+        ;
+    """
+    #クエリを実行
+    my_query(sqlstring, cur)
+
+    ls = pd.DataFrame(cur.fetchall())
+    df = pd.DataFrame(index=[], columns=['shosaiID', 'friendcode'])
+    #データベースをクローズ
+    my_close(dbcon, cur)
+
+    for i in recset.values:
+        li = list()
+        for j in ls.values:
+            if i[1] == j[0]:
+                li.append(j[1])
+        df = df.append({'shosaiID': i[1], 'friendcode': li}, ignore_index=True)
+
+    recset.insert(12, 'friendcode', df['friendcode'])
+
+    df = pd.DataFrame(index=[], columns=['start', 'end'])
+
+    for ind, rowdata in recset.iterrows():
+        sec_s = rowdata[3].total_seconds()
+        sec_e = rowdata[4].total_seconds()
+        hour_s = int(sec_s/3600)
+        hour_e = int(sec_e/3600)
+        min_s = int((sec_s/3600 - hour_s)*60)
+        min_e = int((sec_e/3600 - hour_e)*60)
+        df = df.append({'start': f'{str(hour_s).zfill(2)}:{str(min_s).zfill(2)}',
+                       'end': f'{str(hour_e).zfill(2)}:{str(min_e).zfill(2)}'}, ignore_index=True)
+    recset = recset.drop(columns=['start', 'end'])
+    recset.insert(3, 'start', df['start'])
+    recset.insert(4, 'end', df['end'])
+
+    li = ['行動日', '開始時間', '終了時間', '行き先', '移動方法',
+          '出発地', '目的地', '同行者', '同行者', '人数', '同行者学籍番号', '備考', '最終更新日']
+
+    return render_template(
+        "manage_table.html",
+        title="キャンセルレコード選択画面",
+        table_data=recset,
+        list=li,
+        name='koudouID',
+        action_edit='/update1_koudou',
+        action_delete='/delete_koudou'
+    )
+
+
 @mng.route("/no_record")
 def no_record():
     # 3日以上連続して記録がない
     dbcon, cur = my_open(**dsn)
 
     sql = f"""
-        SELECT *
-        FROM kansatu
-        right outer JOIN client
-        on kansatu.clientcode = client.clientcode
+        select *
+        from client
+        where delflag = 0
         ;
     """
     my_query(sql, cur)
-    # レコードを取得
-    recset = pd.DataFrame(cur.fetchall())
-    li = list()
+    clients = pd.DataFrame(cur.fetchall())
+
+    li = []
+    # 記録の判定
     delta = timedelta(days=3)
+    for _, client in clients.iterrows():
+        # SQL呼び出し
+        sql = f"""
+            select *
+            from kansatu
+            where clientcode = '{client["clientcode"]}'
+            and delflag = 0
+            ;
+        """
+        my_query(sql, cur)
+        # レコードを取得
+        recset = pd.DataFrame(cur.fetchall())
 
-    for item in recset.values:
-        # 3日以上かどうか
-        if item[2] == None:
-            # 記録なし
-            li.append([item[1], item[20]])
-        else:
-            # 記録あり
-            debug = date.today() - item[2]
-            if debug > delta:
-                li.append(item[1])
+        if not recset.empty:
+            if (date.today() - recset["record"].max()) < delta:
+                continue
+        #print(client.loc[["clientcode", "namae", "phone", "email"]])
+        li.append([client["clientcode"],client["namae"], client["phone"], client["email"]])
 
-    li = pd.DataFrame(li, columns=['clientcode'])
-    # print(li)
+    column_list = ["CODE", "氏名", "電話番号", "Email"]
+    table = pd.DataFrame(li, columns=column_list)
+    print(table)
 
     my_close(dbcon, cur)
 
     return render_template(
-        "manage_table.html",
+        "manage_list.html",
         title="3日以上連続記録なし",
-        table_data=li
+        column_list=column_list,
+        table_data=table
     )
 
 
@@ -453,6 +644,6 @@ def close_contact():
     return render_template(
         "manage_list.html",
         title="濃厚接触者",
-        column_list = column_list,
+        column_list=column_list,
         table_data=recset
     )
