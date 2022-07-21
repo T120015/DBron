@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/manage.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/manage_input.css')}}">
+    <script src="{{url_for('static', filename='scripts/input.js')}}"></script>
+    <script type="text/javascript">
+        let posi_list = {{input_position | tojson}};
+        let cls_list = {{input_class | tojson}};
+        let position = {{position | tojson}};
+        let clas = {{cls | tojson}};
+    </script>
+</head>
+<body>
+    <h2>{{title}}</h2>
+    <form action="/manage{{to_url}}" method="post">
+        <table border>
+        <tr>
+        <th>区分</th>  
+        <td><select name="position" id="posi"></select></td>
+        <th>部類</th>
+        <td><select name="class" id="cls"></select></td>
+        </tr>
+        <tr>
+            <th>CODE</th>
+            <td><input type="text" name="clientcode" value="{{code}}"></td>
+            <th>PASS</th>
+            <td><input type="text" name="pass" value="{{pswd}}"></td>
+        </tr>
+        <tr>
+            <th>氏名</th>
+            <td><input type="text" name="namae" value="{{name}}"></td>
+        </tr>
+        <tr>
+            <th>性別</th>
+            <td>
+            {% if gender == "女" %}
+            <input type="radio" class="gender" name="gender" value="男">男
+            <input type="radio" class="gender" name="gender" value="女" checked>女
+            {% else %}
+            <input type="radio" class="gender" name="gender" value="男" checked>男
+            <input type="radio" class="gender" name="gender" value="女">女
+            {% endif %}
+            </td>
+            <th>年齢</th>
+            <td><input type="number" min="0" class="stext" name="age" value="{{age}}"></td>
+        </tr>
+        <tr>
+            <th>電話番号</th>
+            <td><input type="tel" name="phone" value="{{phone}}"></td>
+        </tr>
+        <tr>
+            <th>E-mail</th>
+            <td><input type="email" name="email" value="{{email}}"></td>
+        </tr>
+        <tr>
+            <th>所属部署</th>
+            <td><input type="text" name="faculty" value="{{faculty}}"></td>
+        </tr>
+        </table>
+        <div class="setBtn">
+        {% if url == "/select1" %}
+        <input type="submit" class="btn" value="編集">
+        </form>
+        <form action="/manage{{url}}" method="post">
+        <input type="hidden" name="clientcode" value="{{code}}">
+        <input type="submit" class="btn" value="戻る">
+        {% else %}
+        <input type="submit" class="btn" value="追加">
+        <a href="/manage"><input type="button" class="btn" value="戻る"></a>
+        {% endif %}
+        </form> 
+
+        </div>
+</body>
+</html>

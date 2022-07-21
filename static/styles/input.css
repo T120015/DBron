@@ -1,0 +1,32 @@
+tr {
+    display: table;
+    width: 305px;
+}
+
+th {
+    width: 65px;
+}
+
+select {
+    width: 75px;
+}
+
+input {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.setBtn{
+    display: flex;
+    width: 10%;
+}
+
+input.btn{
+    --width: 10px;
+    margin: 5px;
+    text-align: center;
+}
+
+.gender {
+    width: min-content;
+}

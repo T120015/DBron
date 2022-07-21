@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{title}}</title>
+<link rel="stylesheet" href="{{url_for('static',filename='styles/manage.css')}}">
+</head>
+<body>
+    <h2>{{title}}</h2>
+    <ul>
+        <li><a href="/manage/table">関係者情報一覧</a></li>
+        <li><a href="/manage/insert">関係者情報追加(個人)</a></li>
+        <li><a href="/manage/insert_files">関係者情報追加(一括)</a></li>
+        <li><a href="/manage/select">関係者情報編集</a></li>
+        <li><a href="/manage/no_record">3日以上連続記録なし</a></li>
+        <li><a href="/manage/health">37.5度以上or5個チェックの人</a></li>
+        <li><a href="/manage/corona">コロナ感染者</a></li>
+        <li><a href="/manage/close_contact">濃厚接触者</a></li>
+    </ul>
+        <br>
+        トップに<a href="/">戻る</a>
+</body>
+</html>

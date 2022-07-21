@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/style.css')}}">
+    <script defer src="{{url_for('static', filename='scripts/infect.js')}}"></script>
+    </head>
+    <body>
+        <h2>{{title}}</h2>
+        <form action="/infect_corona1" method="POST">
+            コロナ感染<input type="radio" name="infect" value=1 onchange="radio()">
+            濃厚接触者<input type="radio" name="infect" value=0 onchange="radio()" checked><br>
+            <div id="hospital"></div>
+            感染日<input type="date" name="onset" value="{{today}}"><br>
+            <br>
+            <input type="submit" value="完了">
+            <a href="/"><input type="button" value="戻る"></a>
+        </form>
+        <pre>{{message}}</pre>
+    </body>
+</html>
