@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/manage.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/manage_list.css')}}">
+</head>
+<body>
+    <h2>{{title}}</h2>
+    管理者メニューに<a href="/manage">戻る</a>
+    <table border>
+    <!--ヘッダ情報とレコードを表示-->
+        <tr>
+        <!--ヘッダ-->
+        {% for column in column_list %}
+            {% if column in ("区分", "部類", "年齢", "性別") %}
+            <th class="school">{{column}}</th>
+            {% else %}
+            <th>{{column}}</th>
+            {% endif %}
+        {% endfor %}
+        </tr>
+        <!--レコード-->
+        {% for row_data in table_data.values %}
+            <tr>
+            {% for item in row_data %}
+            <td>{{item}}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

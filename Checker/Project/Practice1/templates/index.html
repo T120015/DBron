@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{title}}</title>
+    </head>
+    <body>
+        <h1>{{title}}</h1>
+        <form action="/result" method="POST">
+            地域<br>
+            <input type="radio" name="Area" value="Sapporo">Sapporo
+            <input type="radio" name="Area" value="Sendai">Sendai
+            <input type="radio" name="Area" value="Tokyo" checked>Tokyo
+            <input type="radio" name="Area" value="Suwa">Suwa
+            <input type="radio" name="Area" value="Nagoya">Nagoya
+            <input type="radio" name="Area" value="Osaka">Osaka
+            <input type="radio" name="Area" value="Fukuoka">Fukuoka
+            <input type="radio" name="Area" value="Naha">Naha<br>
+            <input type="submit" value="Search">
+        </form>
+        
+    </body>
+</html>

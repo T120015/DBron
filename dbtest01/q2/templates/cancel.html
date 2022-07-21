@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h2>{{title}}</h2>
+    <table border>
+        <tr>
+            <th>担当者氏名</th>
+            <td>{{data['tantou'][0]}}</td>
+        </tr>
+        <tr>
+            <th>地域</th>
+            <td>{{data['area'][0]}}</td>
+        </tr>
+        <tr>
+            <th>売上額</th>
+            <td>{{data['sales'][0]}}</td>
+        </tr>
+        <tr>
+            <th>売上日</th>
+            <td>{{data['s_date'][0]}}</td>
+        </tr>
+    </table>
+    <form action="/update_cancel3" method="post">
+        <input type="hidden" name="uriageID" value="{{data['uriageID'][0]}}">
+        <input type="submit" value="キャンセル処理">
+        <a href="/update_cancel1"><input type="button" value="リセット"></a>
+    </form>
+</body>
+</html>

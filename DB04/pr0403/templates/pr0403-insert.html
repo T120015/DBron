@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h2>{{title}}</h2>
+    <form action="/msg-insert" method="post">
+        名前: <input type="text" name="fname"><br>
+        年齢: <input type="number" name="age"><br>
+        性別: <input type="radio" name="gender" value="male" checked>男
+                <input type="radio" name="gender" value="female">女 <br>
+        Tell: <input type="text" name="tell">(ハイフンなし) <br>
+        E-Mail: <input type="text" name="email"><br>
+        <br>
+        <input type="submit" value="決定">
+        <input type="reset" value="リセット">
+    </form>
+</body>
+</html>

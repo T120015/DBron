@@ -1,0 +1,19 @@
+<!-- fuku1002-top.html -->
+<!doctype html>
+<html lang="ja">
+    <head>
+        <title>{{title}}</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h2>{{title}}</h2>
+        <form action="/search" method="POST">
+            市町村名を入力してください
+            <input type="text" name="city"><br>
+            <input type="radio" name="sel" value="area">市町村別郵便番号
+            <input type="radio" name="sel" value="office">事業所別郵便番号<br>
+            <input type="submit" value="検索">
+            <input type="reset" value="reset">
+        </form>
+    </body>
+</html>

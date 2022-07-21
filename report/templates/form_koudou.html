@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/style.css')}}">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h2>{{title}}</h2>
+    <form action="{{to_url}}" method="post">
+        <table>
+        <tr>
+        <td>行動日</td>
+        <td><input type="date" name="action" id = "action" value = {{action}}></td>
+        </tr>
+        <tr>
+        <td>開始時間</td>
+        <td><select name="start">
+            {% if not start is none %}
+                <option value="{{start}}" selected hidden>{{start}}</option>
+            {% endif %}
+            {% for i in range(24) %}
+                {% for j in range(0, 60, 5) %}
+                    <option value="{{ '%02d' % i}}:{{ '%02d' % j}}">{{'%02d'%i}}:{{'%02d'%j}}</option>
+                {% endfor %}
+            {% endfor %}
+        </select></td>
+        </tr>
+        <tr>
+        <td>終了時間</td>
+        <td><select name="end">
+            {% if not start is none %}
+                <option value="{{end}}" selected hidden>{{end}}</option>
+            {% endif %}
+            {% for i in range(24) %}
+                {% for j in range(0, 60, 5) %}
+                    <option value="{{ '%02d' % i}}:{{ '%02d' % j}}">{{'%02d'%i}}:{{'%02d'%j}}</option>
+                {% endfor %}
+            {% endfor %}
+        </select></td>
+        </tr>
+        <tr>
+        <td>行先</td>
+        <td><input type="text" name="location" value = '{{location}}' placeholder = "例：実家"></td>
+        </tr>
+        <tr>
+        <td>移動方法</td>
+        <td><input type="text" name="move" value = '{{move}}' placeholder = "例：車"></td>
+        </tr>
+        <tr>
+        <td>出発地</td>
+        <td><input type="text" name="departure" value = '{{departure}}' placeholder = "例：草加市のアパート"></td>
+        </tr>
+        <tr>
+        <td>目的地</td>
+        <td><input type="text" name="arrival" value = '{{arrival}}' placeholder = "例：〇〇県〇〇市"></td>
+        </tr>
+        <tr>
+        <td>同行者</td>
+        <td>
+        {% if companions == 1 %}
+            有<input type="radio" name="companions" value = "1" id = "companions" onchange="radio()" checked>
+            無<input type="radio" name="companions" value = "0" id = "conpanions" onchange="radio()">
+        {% else %}
+            有<input type="radio" name="companions" value = "1" id = "companions" onchange="radio()">
+            無<input type="radio" name="companions" value = "0" id = "conpanions" onchange="radio()" checked>
+        {% endif %}
+        </td>
+        </tr>
+        </table>
+        <br>
+
+        <input type="submit" value="提出" id = "submit">
+        <a href="/"><input type="button" value="戻る"></a>
+    </form>
+    <script defer>
+        var element_companions = document.getElementsByName('companions');
+        var element_submit = document.getElementById('submit');
+        var element_action = document.getElementById('action');
+        var now = new Date();
+        function radio() {
+            if(element_companions[0].checked){
+                element_submit.value = "次へ";
+            }
+            if(element_companions[1].checked){
+                element_submit.value = "提出";
+            }
+        }
+
+        window.onload = function(){
+            if(element_companions[0].checked){
+                element_submit.value = "次へ";
+            }
+            if(element_companions[1].checked){
+                element_submit.value = "提出";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h2>{{title}}</h2>
+    <table border>
+        <tr>
+            {% if flag != 0 %}
+                <th>ボタン</th>
+            {% endif %}
+            {% for key in table_data.columns %}
+                <th>{{key}}</th>
+            {% endfor %}
+        </tr>
+        {% for rows in table_data.values %}
+        <tr>
+            {% if flag != 0 %}
+                <td>
+                    {% if flag == 1 %}
+                    <form action="/data-update" method="POST">
+                        <input type="hidden" name="friendsID" value="{{rows[0]}}">
+                        <input type="submit" value="edit" >
+                    </form>      
+                    {% elif flag == 2 %}
+                    <form action="/msg-delete" method="POST">
+                        <input type="hidden" name="friendsID" value="{{rows[0]}}">
+                        <input type="submit" value="delete" >
+                    </form>   
+                    {% endif %}
+                </td>
+            {% endif %}
+            {% for item in rows %}
+                <td>{{item}}</td>    
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    トップに<a href="/">戻る</a>
+</body>
+</html>

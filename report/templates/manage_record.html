@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h2>{{title}}</h2>
+    <form action="/manage/show_record2" method="post">
+        <input type="hidden" name="clientcode" value="{{code}}">
+        <input type="radio" name="url" value="show_kenkou" checked>健康記録
+        <input type="radio" name="url" value="show_koudou">行動記録
+        <br>
+        <input type="submit" value="決定">
+        <a href="/show_record"><input type="button" value="戻る"></a>
+    </form>
+</body>
+</html>
