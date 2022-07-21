@@ -1,3 +1,9 @@
+@charset "utf-8";
+
+table{
+    background-color: white;
+}
+
 tr {
     display: table;
     width: 305px;
@@ -5,6 +11,10 @@ tr {
 
 th {
     width: 65px;
+}
+
+.stext{
+    width: 60px;
 }
 
 select {
@@ -16,15 +26,15 @@ input {
     width: 100%;
 }
 
+input.btn{
+    width: 50px;
+    text-align: center;
+    margin: 5px;
+}
+
 .setBtn{
     display: flex;
     width: 10%;
-}
-
-input.btn{
-    --width: 10px;
-    margin: 5px;
-    text-align: center;
 }
 
 .gender {

@@ -11,29 +11,18 @@ dsn = {
     'database': 'dbron'
 }
 
-fns = [
-    #"./school.csv",
-    #"./client.csv", "./client2.csv",
-    "./kansatu.csv", "./kansatu2.csv",
-    #"./koudou.csv", "./koudou2.csv"
-]
 
-
-def csv2df(tableName: str):
+def csv2df(fd):
+    print(type(fd))
     dbcon, cur = my_open(**dsn)
     dt_now = dt.now()
-    with open(fn, "r", encoding="utf-8-sig") as csv_open:
-        csvfile = csv.reader(csv_open)
-        for cnt, item in enumerate(csvfile):
-            if cnt == 0:
-                head = item
-
+    
+    df = pd.read_csv(fd, header=0)
     into = ""
-    for item in head:
+    for item in df.columns:
         into += f"{item},"
     into += "lastupdate"
-
-    df = pd.read_csv(fn, header=0)
+    
     for ind, datas in df.iterrows():
         data = ""
         for item in datas:
@@ -43,7 +32,7 @@ def csv2df(tableName: str):
                 data += f"'{item}',"
         data += f"'{dt_now}'"
         sql = f"""
-            INSERT INTO {tableName}
+            INSERT INTO client
             ({into})
             values
             ({data})
@@ -51,14 +40,6 @@ def csv2df(tableName: str):
         my_query(sql, cur)
 
     dbcon.commit()
-    print(f"{fn}から{len(df)}レコードを新規挿入しました")
-
     my_close(dbcon, cur)
+    return f"{fd.filename}から{len(df)}レコードを新規挿入しました"
 
-
-for i, fn in enumerate(fns):
-    
-    if i < 2:
-        csv2df("kansatu")
-    else:
-        csv2df("koudou")

@@ -7,7 +7,9 @@
     "code-runner.executorMap": {
         "python": "cd $dir && python $fileName",
     },
-    "files.associations": {"*.html": "jinja-html"},
+    "files.associations": {
+        "*.html": "jinja-html",
+    },
     "emmet.includeLanguages": {
         "jinja-html": "html"
     },
@@ -21,21 +23,6 @@
             "other": "on"
         }
     },
-    "sqltools.connections": [
-        {
-            "mysqlOptions": {
-                "authProtocol": "default"
-            },
-            "previewLimit": 50,
-            "server": "172.30.0.10",
-            "port": 3306,
-            "driver": "MySQL",
-            "name": "Webprog",
-            "database": "dbron04",
-            "username": "root",
-            "password": "1234"
-        }
-    ],
     "python.analysis.extraPaths": [
         "/usr/local/lib/python3.10/site-packages/"
     ],

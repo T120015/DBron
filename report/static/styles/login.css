@@ -1,0 +1,56 @@
+@charset "utf-8";
+
+tr {
+  display: table;
+  position: relative;
+}
+
+th {
+  width: 100px;
+}
+
+td {
+  width: 200px;
+}
+
+
+h1 {
+  text-align: center;
+}
+
+input {
+  width: 90%;
+}
+
+body {
+    background-color: rgb(227, 255, 255);
+}
+
+#login {
+    margin-left: 50%;
+    width: auto;
+}
+
+#loginbox {
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px 10px;
+  width: 500px;
+  height: 200px;
+  border: 5px solid #001b64;
+  box-sizing: border-box;
+  position: relative;
+}
+
+#account {
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  margin: -20px 0;
+}
+
+#login_msg{
+    margin: 2%;
+    text-align: center;
+}

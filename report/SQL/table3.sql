@@ -15,7 +15,9 @@ CREATE VIEW acount AS(
         client.gender as gender,
         client.phone as phone,
         client.email as email,
-        client.faculty as faculty 
+        client.faculty as faculty,
+        client.lastupdate as lastupdate,
+        client.delflag as delflag
     FROM client
     INNER JOIN school
     on school.schoolID = client.schoolID

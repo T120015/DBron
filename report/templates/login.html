@@ -5,24 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
-    <link rel="stylesheet" href="{{url_for('static',filename = 'styles/style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename = 'styles/login.css')}}">
 </head>
 <body>
     <h1>{{title}}</h1>
     <div id="loginbox">
         <div id="login_msg">{{msg}}</div>
         <form action="/login1" method="post">
-            <div id="acount">
-                <dl class="acount">
-                    <dd>Client Code</dd>
-                    <dt><input type="text" name="clientcode"></dt>
-                </dl>
-                <dl class="acount">
-                    <dd>PassWord</dd>
-                    <dt><input type="text" name="pass"></dt>
-                </dl>
-                <input type="submit" value="ログイン">
-            </div>
+            <table id="account">
+                <tr class="account">
+                    <th>Client Code</th>
+                    <td><input type="text" name="clientcode"></td>
+                </tr>
+                <tr class="account">
+                    <th>PassWord </th>
+                    <td><input type="password" name="pass"></td>
+                </tr>
+                <tr>
+                    <td><input id="login" type="submit" value="ログイン"></td>
+                </tr>
+            </table>
         </form>
     </div>
 </body>

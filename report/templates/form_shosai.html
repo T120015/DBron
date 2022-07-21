@@ -5,17 +5,44 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
+    <style type = "text/CSS">
+        #text {
+            color: red; 
+            font-size: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/style.css')}}">
 </head>
 <body>
     <h2>{{title}}</h2>
-    <form action="" method="post">
-        間柄<input type="text" name="who" placeholder = "例：友人"><br>
-        人数<input type="num" name="people_num" placeholder = "同行者の人数">
-        内同大学<input type="num" name="num" placeholder = "同行者のうち同大学の者の人数">
-        終了時間<input type="time" name="end"><br>
-        備考<input type="text" name="location" placeholder = "例：お互いマスクせず">
-        <br><input type="submit" value="提出">
+    <form action="{{to_url}}" method="post" id = "frm">
+        間柄<input type="text" name="who" value = '{{who}}' placeholder = "例：友人"><br>
+        人数<input type="num" name="people_num" value = '{{people_num}}' placeholder = "同行者の人数" id = "people_num" oninput = "func1()" required>
+        内同大学<input type="num" name="num" value = '{{num}}' placeholder = "同行者のうち同大学の者の人数" id = "num" oninput = "func1()"><br>
+        <div id = "text"></div>
+        備考<input type="text" name="remarks" value = '{{remarks}}' placeholder = "例：お互いマスクせず">
+        <br><input type="submit" value="提出" id = "submit">
         <input type="reset" value="リセット">
     </form>
+    <script defer>
+        function func1(){
+            var element_num = document.getElementById('num');
+            var element_people_num = document.getElementById('people_num');
+            var element_submit = document.getElementById('submit');
+            if(Number(element_num.value) >= 1){
+                element_submit.defaultValue = "次へ";
+            }
+            else{
+                element_submit.value = "提出";
+            }
+            if(isNaN(element_num.value) || isNaN(element_people_num.value)){
+                document.getElementById('frm').onsubmit = function(){ return false }
+                document.getElementById('text').innerHTML = '※数値で入力してください。';
+            }else{
+                document.getElementById('frm').onsubmit = function(){ return true }
+                document.getElementById('text').innerHTML = '';
+            }              
+        }
+    </script>
 </body>
 </html>

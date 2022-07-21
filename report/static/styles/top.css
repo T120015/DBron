@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+#kiroku_link{
+	width: 185px;
+	height: 170px;
+	margin: 0 auto 20px;
+    border: double 5px #4ec4d3;
+    text-align: center;
+}
+
+.kiroku_link ul{
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+
+h2 {
+    text-align: center;
+}
+
+#message{
+	text-align: center;
+}
